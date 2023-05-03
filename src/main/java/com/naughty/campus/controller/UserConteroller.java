@@ -29,7 +29,6 @@ public class UserConteroller {
         }else {
             queryInfo.setId(null);
         }
-        System.out.println("1111");
         int numbers = userDao.getUserCounts(queryInfo);// 获取数据总数
         int pageStart = (queryInfo.getPageNum()-1)*queryInfo.getPageSize();
         queryInfo.setPageNum(pageStart);
