@@ -3,25 +3,27 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.naughty.campus.dao.UserDao">
-    <select id="getUserByMassage" resultType="java.lang.Integer">
-       	SELECT count(id) FROM easyUser
-       	WHERE username=#{username} AND password=#{password}
-    </select>
+    <!--    <select id="getUserByMassage" resultType="java.lang.Integer">
+               SELECT count(id) FROM easyUser
+               WHERE username=#{username} AND password=#{password}
+        </select>-->
 
     <select id="getAllUser" resultType="com.naughty.campus.bean.Users">
-        SELECT userId,userPwd,studentName,studentGrade,studentDepartment,studentGrade,studentClass,studentPhoneNumber FROM users
-            where 1=1
+        SELECT
+        userId,userPwd,studentName,studentSex,studentDepartment,studentGrade,studentClass,studentPhoneNumber,isAdmin
+        FROM users
+        where 1=1
         <if test="info.id !=null">
             and userId like #{info.id}
         </if>
         <if test="info.department !=null ">
             and studentDepartment = #{info.department}
         </if>
-            LIMIT #{info.pageNum},#{info.pageSize}
+        LIMIT #{info.pageNum},#{info.pageSize}
     </select>
 
     <select id="getUserCounts" resultType="java.lang.Integer">
-       	SELECT count(*) FROM `users` where 1=1
+        SELECT count(*) FROM `users` where 1=1
         <if test="info.id !=null ">
             and userId like #{info.id}
         </if>
@@ -31,28 +33,28 @@
 
     </select>
 
-    <select id="getUpdateUser" resultType="com.naughty.campus.bean.User">
-        SELECT * FROM easyuser WHERE id = #{id}
-    </select>
+    <!--    <select id="getUpdateUser" resultType="com.naughty.campus.bean.User">-->
+    <!--        SELECT * FROM easyuser WHERE id = #{id}-->
+    <!--    </select>-->
 
-    <update id="updateState">
-        UPDATE easyuser SET state = #{state} WHERE id = #{id}
-    </update>
+    <!-- <update id="updateState">
+         UPDATE easyuser SET state = #{state} WHERE id = #{id}
+     </update>
 
-    <insert id="addUser">
-        INSERT INTO easyuser
-        (username,password,email,role,state)
-        VALUE
-        (#{username},#{password},#{email},#{role},#{state})
-    </insert>
+     <insert id="addUser">
+         INSERT INTO easyuser
+         (username,password,email,role,state)
+         VALUE
+         (#{username},#{password},#{email},#{role},#{state})
+     </insert>
 
-    <update id="editUser">
-        UPDATE easyuser SET username = #{username} , password = #{password} ,
-        email = #{email} WHERE id = #{id}
-    </update>
+     <update id="editUser">
+         UPDATE easyuser SET username = #{username} , password = #{password} ,
+         email = #{email} WHERE id = #{id}
+     </update>
 
-    <delete id="deleteUser">
-        DELETE FROM easyuser WHERE id = #{id}
-    </delete>
+     <delete id="deleteUser">
+         DELETE FROM easyuser WHERE id = #{id}
+     </delete>-->
 
 </mapper>

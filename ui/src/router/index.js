@@ -5,6 +5,12 @@ import success from '../components/Success.vue'
 import Home from '../components/Home.vue'
 import Welcome from '../components/Welcome.vue'
 import User from '../components/admin/User.vue'
+import Manager from '../components/admin/Manager.vue'
+import Matches from '../components/admin/Matches.vue'
+import Discussions from '../components/admin/Discussions.vue'
+import MatchScore from '../components/admin/MatchScore.vue'
+import Participant from '../components/admin/Participant.vue'
+import SystemManager from '../components/admin/SystemManager.vue'
 
 Vue.use(VueRouter)
 
@@ -23,6 +29,54 @@ const routes = [
     redirect: '/welcome',
     children: [
       { path: '/welcome', component: Welcome }, { path: '/user', component: User },
+    ],
+  },
+  {
+    path: '/home',
+    component: Home,
+    redirect: '/welcome',
+    children: [
+      { path: '/welcome', component: Welcome }, { path: '/matches', component: Matches },
+    ],
+  },
+  {
+    path: '/home',
+    component: Home,
+    redirect: '/welcome',
+    children: [
+      { path: '/welcome', component: Welcome }, { path: '/manager', component: Manager },
+    ],
+  },
+  {
+    path: '/home',
+    component: Home,
+    redirect: '/welcome',
+    children: [
+      { path: '/welcome', component: Welcome }, { path: '/discussions', component: Discussions },
+    ],
+  },
+  {
+    path: '/home',
+    component: Home,
+    redirect: '/welcome',
+    children: [
+      { path: '/welcome', component: Welcome }, { path: '/matchscore', component: MatchScore },
+    ],
+  },
+  {
+    path: '/home',
+    component: Home,
+    redirect: '/welcome',
+    children: [
+      { path: '/welcome', component: Welcome }, { path: '/participant', component: Participant },
+    ],
+  },
+  {
+    path: '/home',
+    component: Home,
+    redirect: '/welcome',
+    children: [
+      { path: '/welcome', component: Welcome }, { path: '/systemmanager', component: SystemManager },
     ],
   },
 ]

@@ -2,7 +2,7 @@
   <el-container class="home-container">
     <!--头部布局-->
     <el-header style="background-color: #393d49">
-      <div>
+      <div style="color:#009688">
         <span>校园赛事管理系统</span>
       </div>
       <el-button type="info" @click="logout">退出登录</el-button>
@@ -18,32 +18,16 @@
            router开启路由 active-text-color 颜色--
            :collapse="isCollapse" 是否变小 -->
         <!-- 取消伸缩动画 -->
-        <el-menu
-          background-color="rgb(57,61,73)"
-          text-color="#fff"
-          active-text-color="#409eff"
-          unique-opened
-          :collapse="isCollapse"
-          :collapse-transition="false"
-          :router="true"
-          :default-active="activePath"
-        >
+        <el-menu background-color="rgb(57,61,73)" text-color="#fff" active-text-color="#409eff" unique-opened
+          :collapse="isCollapse" :collapse-transition="false" :router="true" :default-active="activePath">
           <template v-for="item in menuList">
-            <el-submenu
-              v-if="item.slist.length > 0"
-              :index="item.id + ''"
-              :key="item.id"
-            >
+            <el-submenu v-if="item.slist.length > 0" :index="item.id + ''" :key="item.id">
               <template slot="title">
                 <i :class="iconsObject[item.id]"></i>
                 <span>{{ item.title }}</span>
               </template>
-              <el-menu-item
-                :index="it.path + ''"
-                v-for="it in item.slist"
-                :key="it.id"
-                @click="saveNavState(it.path + '')"
-              >
+              <el-menu-item :index="it.path + ''" v-for="it in item.slist" :key="it.id"
+                @click="saveNavState(it.path + '')">
                 <template slot="title">
                   <i :class="iconsObject[it.id]"></i>
                   <span>{{ it.title }}</span>
@@ -51,12 +35,7 @@
               </el-menu-item>
             </el-submenu>
 
-            <el-menu-item
-              v-else
-              :index="item.path + ''"
-              :key="item.id"
-              @click="saveNavState(item.path + '')"
-            >
+            <el-menu-item v-else :index="item.path + ''" :key="item.id + ''" @click="saveNavState(item.path + '')">
               <i :class="iconsObject[item.id]"></i>
               <span slot="title">{{ item.title }}</span>
             </el-menu-item>
@@ -134,36 +113,45 @@ export default {
   align-items: center; // 水平
   color: #fff;
   font-size: 20px;
-  > div {
+
+  >div {
     //左侧div加布局
     display: flex;
     align-items: center;
+
     span {
       margin-left: 15px;
     }
   }
 }
+
 .el-aside {
   background-color: #333744;
+
   .el-menu {
     border-right: none; // 对其右边框
   }
 }
+
 .el-main {
   background-color: #eaedf1;
 }
+
 .home-container {
   height: 100%;
 }
+
 .logo_img {
   width: 20%;
   height: 100%;
 }
+
 .iconfont {
   margin-right: 10px;
 }
+
 .toggle-button {
-  background-color: #4a5064;
+  background-color: #009688;
   font-size: 10px;
   line-height: 24px;
   color: #fff;

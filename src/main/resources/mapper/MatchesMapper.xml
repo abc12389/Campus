@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.naughty.campus.dao.MatchesDao">
+<!--    <select id="getMatchesByMassage" resultType="java.lang.Integer">
+       	SELECT count(id) FROM easyMatches
+       	WHERE Matchesname=#{Matchesname} AND password=#{password}
+    </select>-->
+
+    <select id="getAllMatches" resultType="com.naughty.campus.bean.Matches">
+        SELECT matchId,matchTitle,matchType,matchType,enrollStartTime,enrollEndTime,matchStartTime,matchEndTime,matchStatus,sponsor FROM matches
+            where 1=1
+        <if test="info.matchTitle !=null">
+            and matchTitle like #{info.matchTitle}
+        </if>
+        <if test="info.matchStatus !=null ">
+            and matchStatus = #{info.matchStatus}
+        </if>
+            LIMIT #{info.pageNum},#{info.pageSize}
+    </select>
+
+    <select id="getMatchesCounts" resultType="java.lang.Integer">
+       	SELECT count(*) FROM `matches` where 1=1
+        <if test="info.matchTitle !=null ">
+            and matchTitle like #{info.matchTitle}
+        </if>
+        <if test="info.matchStatus !=null ">
+            and matchStatus = #{info.matchStatus}
+        </if>
+
+    </select>
+
+<!--    <select id="getUpdateMatches" resultType="com.naughty.campus.bean.Matches">-->
+<!--        SELECT * FROM easyMatches WHERE id = #{id}-->
+<!--    </select>-->
+
+   <!-- <update id="updateState">
+        UPDATE easyMatches SET state = #{state} WHERE id = #{id}
+    </update>
+
+    <insert id="addMatches">
+        INSERT INTO easyMatches
+        (Matchesname,password,email,role,state)
+        VALUE
+        (#{Matchesname},#{password},#{email},#{role},#{state})
+    </insert>
+
+    <update id="editMatches">
+        UPDATE easyMatches SET Matchesname = #{Matchesname} , password = #{password} ,
+        email = #{email} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteMatches">
+        DELETE FROM easyMatches WHERE id = #{id}
+    </delete>-->
+
+</mapper>

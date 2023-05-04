@@ -2,7 +2,6 @@ package com.naughty.campus.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.naughty.campus.bean.QueryInfo;
-import com.naughty.campus.bean.User;
 import com.naughty.campus.bean.Users;
 import com.naughty.campus.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,7 @@ public class UserConteroller {
         return users_json;
     }
 
-    @RequestMapping("/userState")
+   /* @RequestMapping("/userState")
     public String updateUserState(@RequestParam("id") Integer  id,
                                   @RequestParam("state") Boolean state){
         int i = userDao.updateState(id, state);
@@ -49,18 +48,18 @@ public class UserConteroller {
         System.out.println("用户状态:"+state);
         String str = i >0?"success":"error";
         return str;
-    }
+    }*/
 
-    @RequestMapping("/addUser")
+/*    @RequestMapping("/addUser")
     public String addUser(@RequestBody User user){
         System.out.println(user);
-        user.setRole("普通用户");
-        user.setState(false);
+        user.setRole("普通管理员");
         int i = userDao.addUser(user);
         String str = i >0?"success":"error";
         return str;
-    }
+    }*/
 
+/*
     @RequestMapping("/getUpdate")
     public String getUpdateUser(int id){
         System.out.println("编号:"+id);
@@ -68,7 +67,9 @@ public class UserConteroller {
         String users_json = JSON.toJSONString(updateUser);
         return users_json;
     }
+*/
 
+/*
     @RequestMapping("/editUser")
     public String editUser(@RequestBody User user){
         System.out.println(user);
@@ -76,12 +77,13 @@ public class UserConteroller {
         String str = i >0?"success":"error";
         return str;
     }
+*/
 
-    @RequestMapping("/deleteUser")
+/*    @RequestMapping("/deleteUser")
     public String deleteUser(int id){
         System.out.println(id);
         int i = userDao.deleteUser(id);
         String str = i >0?"success":"error";
         return str;
-    }
+    }*/
 }

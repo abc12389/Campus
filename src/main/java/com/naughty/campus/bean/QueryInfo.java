@@ -14,5 +14,7 @@ public class QueryInfo {
     private int pageSize=1;
     private String id;
     private String department;//学院
+    private String matchStatus;//赛事状态
+    private String matchTitle;//赛事名称
 
 }

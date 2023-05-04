@@ -22,6 +22,4 @@ public class Users {
     private String studentSex;
     private long teamId;
     private long isAdmin;
-
-
 }

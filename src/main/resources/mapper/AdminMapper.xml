@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.naughty.campus.dao.AdminDao">
+    <select id="getAdminByMassage" resultType="java.lang.Integer">
+       	SELECT count(id) FROM teacheradmin
+       	WHERE name=#{name} AND pwd=#{pwd}
+    </select>
+
+
+
+    <select id="getUpdateAdmin" resultType="com.naughty.campus.bean.Admin">
+        SELECT * FROM teacheradmin WHERE id = #{id}
+    </select>
+
+    <insert id="addAdmin">
+        INSERT INTO teacheradmin
+        (name,pwd,role)
+        VALUE
+        (#{name},#{pwd},#{role}
+    </insert>
+
+
+
+    <delete id="deleteAdmin">
+        DELETE FROM teacheradmin WHERE id = #{id}
+    </delete>
+
+</mapper>

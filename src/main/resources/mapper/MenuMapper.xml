@@ -5,17 +5,19 @@
 <mapper namespace="com.naughty.campus.dao.MenuDao">
     <!--映射实体-->
     <resultMap id="menuMap" type="com.naughty.campus.bean.MainMenu">
-        <id column="id"  property="id"></id>
-        <result column="title"  property="title"></result>
-        <result column="path"  property="path"></result>
-        <collection  property="slist" ofType="com.naughty.campus.bean.SubMenu">
-            <result column="sid"  property="id"></result>
-            <result column="stitle"  property="title"></result>
-            <result column="spath"  property="path"></result>
+        <id column="id" property="id"></id>
+        <result column="title" property="title"></result>
+        <result column="path" property="path"></result>
+        <collection property="slist" ofType="com.naughty.campus.bean.SubMenu">
+            <result column="sid" property="id"></result>
+            <result column="stitle" property="title"></result>
+            <result column="spath" property="path"></result>
         </collection>
     </resultMap>
 
     <select id="getMainMenus" resultMap="menuMap">
-SELECT mm.*,sm.id AS sid ,sm.title AS stitle,sm.path AS spath FROM mainmenu mm LEFT JOIN submenu sm ON mm.id = sm.mid;
+        SELECT mm.*, sm.id AS sid, sm.title AS stitle, sm.path AS spath
+        FROM mainmenu mm
+                 LEFT JOIN submenu sm ON mm.id = sm.mid ORDER BY id ;
     </select>
 </mapper>

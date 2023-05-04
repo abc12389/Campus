@@ -16,8 +16,8 @@
             >
               欢迎使用校园赛事系统
             </h2>
-            <h5>请登录</h5>
-            <div class="container_right">
+            <h5  style="color: red">请先登录</h5>
+            <div class="container_right" >
               <el-form
                 class="form"
                 id="form2"
@@ -27,23 +27,22 @@
                 label-width="0px"
                 style="width: 80%; display: inline-block"
               >
-                <el-form-item prop="username">
+                <el-form-item prop="name">
                   <el-input
-                    v-model="loginForm.username"
+                    v-model="loginForm.name"
                     prefix-icon="iconfont icondenglu"
                   ></el-input>
                 </el-form-item>
-                <el-form-item prop="password">
+                <el-form-item prop="pwd">
                   <el-input
-                    v-model="loginForm.password"
+                    v-model="loginForm.pwd"
                     prefix-icon="iconfont iconmima"
                     type="password"
                   ></el-input>
                 </el-form-item>
-                <el-form-item class="btns">
+                <el-form-item class="btns" style="margin-top: 18%;">
                   <el-button type="primary" @click="login">登录</el-button>
-                  <el-button type="info" @click="resetLoginForm"
-                    >重置</el-button
+                  <el-button type="info" @click="resetLoginForm">重置</el-button
                   >
                 </el-form-item>
               </el-form>
@@ -61,17 +60,17 @@ export default {
   data() {
     return {
       loginForm: {
-        username: "admin",
-        password: "123456",
+        name: "admin",
+        pwd: "236236",
       },
       loginRules: {
-        username: [
+        name: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 5, max: 8, message: "长度在 5 到 8 个字符", trigger: "blur" },
+          { min: 5, max: 8, message: "长度在 3 到 8 个字符", trigger: "blur" },
         ],
-        password: [
+        pwd: [
           { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 8, message: "密码为 6~8 位", trigger: "blur" },
+          { min: 6, max: 8, message: "密码为 4~8 位", trigger: "blur" },
         ],
       },
     };
@@ -115,7 +114,7 @@ export default {
 }
 .container {
   width: 50%;
-  height: 57%;
+  height: 60%;
   background-color: #e6efef;
   border-radius: 10px;
   box-shadow: 4px 4px 10px #6aa0a0;
