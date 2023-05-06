@@ -23,10 +23,10 @@ public class UserConteroller {
         if(queryInfo.getDepartment()==""||queryInfo.getDepartment()==null){
             queryInfo.setDepartment(null);
         }
-        if(queryInfo.getId()!=""||queryInfo.getId()!=null){
-            queryInfo.setId("%"+queryInfo.getId()+"%");
+        if(queryInfo.getStudentName()!=""||queryInfo.getStudentName()!=null){
+            queryInfo.setStudentName("%"+queryInfo.getStudentName()+"%");
         }else {
-            queryInfo.setId(null);
+            queryInfo.setStudentName(null);
         }
         int numbers = userDao.getUserCounts(queryInfo);// 获取数据总数
         int pageStart = (queryInfo.getPageNum()-1)*queryInfo.getPageSize();

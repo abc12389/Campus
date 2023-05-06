@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserDao {
+public interface StuManagerDao {
 
    // public int getUserByMassage(@Param("username") String username, @Param("password") String password);
 
-    public List<Users> getAllUser(@Param("info") QueryInfo info);
-    public int getUserCounts(@Param("info") QueryInfo info);
+    public List<Users> getAllStuManager(@Param("info") QueryInfo info);
+    public int getStuManagerCounts(@Param("info") QueryInfo info);
 
    // public int updateState(Integer id, Boolean state);
     //public int addUser(User user);

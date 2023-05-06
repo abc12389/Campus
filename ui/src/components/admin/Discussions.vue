@@ -10,14 +10,12 @@
         <el-card>
             <el-row :gutter="10">
                 <el-col :span="5">
-                    <el-select v-model="queryInfo.department" placeholder="请选择学院">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                    </el-select>
+                    <el-input placeholder="请输入姓名查找" v-model="queryInfo.studnetName" clearable @clear="getDiscussionsList">
+                    </el-input>
                 </el-col>
                 <el-col :span="6">
                     <!-- 搜索添加 -->
-                    <el-input placeholder="请输入内容查找" v-model="queryInfo.id" clearable @clear="getDiscussionsList">
+                    <el-input placeholder="请输入内容查找" v-model="queryInfo.content" clearable @clear="getDiscussionsList">
                     </el-input>
                 </el-col>
                 <el-col :span="2">
@@ -33,12 +31,12 @@
             <el-table :data="discussionslist" :header-cell-style="{ 'text-align': 'center' }"
                 :cell-style="{ 'text-align': 'center' }" border stripe>
                 <el-table-column type="index"></el-table-column>
-                <el-table-column label="学号" width="170" prop="" alin></el-table-column>
-                <el-table-column label="姓名" width="90" prop=""></el-table-column>
-                <el-table-column label="发表时间" width="170" prop=""></el-table-column>
-                <el-table-column label="发表内容" width="90" prop=""></el-table-column>
-                <el-table-column label="回复者" width="60" prop=""></el-table-column>
-                <el-table-column label="回复内容" prop=""></el-table-column>
+                <el-table-column label="学号" width="170" prop="studentId" alin></el-table-column>
+                <el-table-column label="姓名" width="90" prop="studentName"></el-table-column>
+                <el-table-column label="发表时间" width="170" prop="publishTime"></el-table-column>
+                <el-table-column label="发表内容" width="90" prop="content"></el-table-column>
+                <el-table-column label="回复者" width="60" prop="responder"></el-table-column>
+                <el-table-column label="回复内容" prop="reply"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <!-- 修改 -->
@@ -146,10 +144,10 @@ export default {
         return {
             // 请求数据
             queryInfo: {
-                id: "", //学号
                 pageNum: 1,
                 pageSize: 6,
-                department: "", //学院
+                content: "",
+                studentName: "",
             },
             discussionslist: [], // 用户列表
             options: [
@@ -213,7 +211,7 @@ export default {
     methods: {
         async getDiscussionsList() {
             // 调用post请求
-            const { data: res } = await this.$http.get("allDiscussions", {
+            const { data: res } = await this.$http.get("allDiscussion", {
                 params: this.queryInfo,
             });
             this.discussionslist = res.data; // 将返回数据赋值

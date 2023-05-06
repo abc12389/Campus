@@ -1,11 +1,13 @@
 package com.naughty.campus.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.naughty.campus.bean.MatchesDTO;
 import com.naughty.campus.bean.QueryInfo;
 import com.naughty.campus.bean.Matches;
 import com.naughty.campus.dao.MatchesDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,14 +54,36 @@ public class MatchesController {
         return str;
     }*/
 
-/*    @RequestMapping("/addmatches")
-    public String addMatches(@RequestBody Matches matches){
-        System.out.println(matches);
-        matches.setRole("普通管理员");
-        int i = matchesDao.addMatches(matches);
+     @RequestMapping("/addmatches")
+    public String addMatches(@RequestBody MatchesDTO matchesDto){
+//         先处理大一大二...
+         Matches matches = new Matches();
+         matches.setAllowFirst(0);
+         matches.setAllowSecond(0);
+         matches.setAllowThird(0);
+         matches.setAllowFourth(0);
+         List<String> checkList = matchesDto.getCheckList();
+         for (String s : checkList){
+             if(s.equals("大一")){
+                 matchesDto.setAllowFirst(1);
+             }
+             if(s.equals("大二")){
+                 matchesDto.setAllowSecond(1);
+             }
+             if(s.equals("大三")){
+                 matchesDto.setAllowThird(1);
+             }
+             if(s.equals("大四")){
+                 matchesDto.setAllowFourth(1);
+             }
+
+         }
+
+
+         int i = matchesDao.addMatches(matches);
         String str = i >0?"success":"error";
         return str;
-    }*/
+    }
 
 /*
     @RequestMapping("/getUpdate")

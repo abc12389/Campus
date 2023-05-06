@@ -2,37 +2,38 @@
 <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.naughty.campus.dao.DiscussionsDao">
+<mapper namespace="com.naughty.campus.dao.DiscussionDao">
     <!--    <select id="getDiscussionsByMassage" resultType="java.lang.Integer">
                SELECT count(id) FROM easyDiscussions
                WHERE discussionsname=#{discussionsname} AND password=#{password}
         </select>-->
 
-    <select id="getAllDiscussions" resultType="com.naughty.campus.bean.Discussions">
+    <select id="getAllDiscussion" resultType="com.naughty.campus.bean.Discussions">
         SELECT
-        discussionId,studentId,studentName,publishTime,content
-        FROM discussions
-        where 1=1
-        <if test="info.id !=null">
-            and discussionsId like #{info.id}
+               studentId,studentName,publishTime,content,responder,reply
+        FROM
+             discussions
+        WHERE 1=1
+
+        <if test="info.studentName !=null">
+            and studentName like #{info.studentName}
         </if>
-        <if test="info.department !=null ">
-            and studentDepartment = #{info.department}
+        <if test="info.content !=null ">
+            and content like #{info.content}
         </if>
         LIMIT #{info.pageNum},#{info.pageSize}
     </select>
 
     <select id="getDiscussionsCounts" resultType="java.lang.Integer">
-        SELECT count(*) FROM `discussionss` where 1=1
-        <if test="info.id !=null ">
-            and discussionsId like #{info.id}
+        SELECT count(*) FROM 'discussions'
+           <if test="info.studentName !=null ">
+            and studentName like #{info.studentName}
         </if>
-        <if test="info.department !=null ">
-            and studentDepartment = #{info.department}
+        <if test="info.content !=null ">
+            and content like #{info.content}
         </if>
 
     </select>
-    <select id="getDiscussionCounts" resultType="java.lang.Integer"></select>
 
     <!--    <select id="getUpdateDiscussions" resultType="com.naughty.campus.bean.Discussions">-->
     <!--        SELECT * FROM easydiscussions WHERE id = #{id}-->

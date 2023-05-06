@@ -25,7 +25,7 @@
                         @click="getUserList">搜索</el-button>
                 </el-col>
                 <el-col :span="4">
-                    <el-button type="primary" style="margin-left:10px" @click="addDialogVisible = true">添加用户</el-button>
+                    <el-button type="primary" style="margin-left:10px" @click="addDialogVisible = true">添加成绩</el-button>
                 </el-col>
             </el-row>
             <!-- 用户列表 -->
@@ -40,7 +40,7 @@
                 <el-table-column label="团队名称" width="90" prop=""></el-table-column>
                 <el-table-column label="学院" width="170" prop=""></el-table-column>
                 <el-table-column label="成绩" width="60" prop=""></el-table-column>
-                <el-table-column label="排名" width="60" prop=""></el-table-column>
+                <!-- <el-table-column label="排名" width="60" prop=""></el-table-column> -->
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <!-- 修改 -->
@@ -60,7 +60,7 @@
         </el-card>
 
         <!-- 创建新用户对话框 -->
-        <el-dialog title="添加用户" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+        <el-dialog title="添加成绩" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
             <!-- 内容主体区域 -->
             <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="70px">
                 <!-- 学生学号 -->

@@ -5,50 +5,33 @@
         <el-col :span="12" style="width: 50%; height: 100%">
           <div class="contain-left"></div>
         </el-col>
-        <el-col :span="12"
-          ><div class="grid-content bg-purple" style="text-align: center">
-            <h2
-              style="
+        <el-col :span="12">
+          <div class="grid-content bg-purple" style="text-align: center">
+            <h2 style="
                 margin-bottom: 20px;
                 margin-top: 40px;
                 display: inline-block;
-              "
-            >
+              ">
               欢迎使用校园赛事系统
             </h2>
-            <h5  style="color: red">请先登录</h5>
-            <div class="container_right" >
-              <el-form
-                class="form"
-                id="form2"
-                ref="loginFormRef"
-                :model="loginForm"
-                :rules="loginRules"
-                label-width="0px"
-                style="width: 80%; display: inline-block"
-              >
+            <h5 style="color: red">请先登录</h5>
+            <div class="container_right">
+              <el-form class="form" id="form2" ref="loginFormRef" :model="loginForm" :rules="loginRules" label-width="0px"
+                style="width: 80%; display: inline-block">
                 <el-form-item prop="name">
-                  <el-input
-                    v-model="loginForm.name"
-                    prefix-icon="iconfont icondenglu"
-                  ></el-input>
+                  <el-input v-model="loginForm.name" prefix-icon="iconfont icondenglu"></el-input>
                 </el-form-item>
                 <el-form-item prop="pwd">
-                  <el-input
-                    v-model="loginForm.pwd"
-                    prefix-icon="iconfont iconmima"
-                    type="password"
-                  ></el-input>
+                  <el-input v-model="loginForm.pwd" prefix-icon="iconfont iconmima" type="password"></el-input>
                 </el-form-item>
                 <el-form-item class="btns" style="margin-top: 18%;">
                   <el-button type="primary" @click="login">登录</el-button>
-                  <el-button type="info" @click="resetLoginForm">重置</el-button
-                  >
+                  <el-button type="info" @click="resetLoginForm">重置</el-button>
                 </el-form-item>
               </el-form>
             </div>
-          </div></el-col
-        >
+          </div>
+        </el-col>
       </el-row>
       <!-- Sign In -->
     </div>
@@ -112,6 +95,7 @@ export default {
   height: 100vh;
   place-items: center;
 }
+
 .container {
   width: 50%;
   height: 60%;
@@ -119,6 +103,7 @@ export default {
   border-radius: 10px;
   box-shadow: 4px 4px 10px #6aa0a0;
 }
+
 .contain-left {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;

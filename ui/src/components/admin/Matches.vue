@@ -1,12 +1,5 @@
 <template>
     <div>
-        <!-- 面包屑导航111111 -->
-        <!-- <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>权限管理</el-breadcrumb-item>
-        <el-breadcrumb-item>赛事列表</el-breadcrumb-item>
-      </el-breadcrumb> -->
-        <!-- 卡片视图区 -->
         <el-card>
             <el-row :gutter="10">
                 <el-col :span="4">
@@ -33,14 +26,21 @@
             <el-table :data="matchlist" :header-cell-style="{ 'text-align': 'center' }"
                 :cell-style="{ 'text-align': 'center' }" border stripe>
                 <el-table-column type="index"></el-table-column>
-                <el-table-column label="赛事图片" width="150" prop=" "></el-table-column>
-                <el-table-column label="赛事名称" width="150" prop="matchTitle" alin></el-table-column>
-                <el-table-column label="赛事类型" width="90" prop="matchType"></el-table-column>
-                <el-table-column label="报名时间" width="150" prop=" "></el-table-column>
-                <el-table-column label="比赛时间" width="150" prop=" "></el-table-column>
-                <el-table-column label="赛事文件" width="90" prop=""></el-table-column>
-                <el-table-column label="赛事状态" width="80" prop="matchStatus"></el-table-column>
-                <el-table-column label="操作">
+                <el-table-column label="赛事名称" width="200" prop="matchTitle"></el-table-column>
+                <el-table-column label="赛事类型" width="100" prop="matchType"></el-table-column>
+                <el-table-column label="报名时间" prop="enrollStartTime,enrollEndTime" :formatter="formatDate">
+                    <template slot-scope="scope">
+                        {{ scope.row.enrollStartTime }} - {{ scope.row.enrollEndTime }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="比赛时间" prop="matchStartTime,matchEndTime">
+                    <template slot-scope="scope">
+                        {{ scope.row.matchStartTime }} - {{ scope.row.matchEndTime }}
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="赛事状态" width="100" prop="matchStatus"></el-table-column>
+                <el-table-column label="操作" width="120">
                     <template slot-scope="scope">
                         <!-- 修改 -->
                         <el-button type="primary" icon="el-icon-edit" style="background-color: grey; border-color: grey;"
@@ -61,82 +61,148 @@
         <!-- 创建新赛事对话框 -->
         <el-dialog title="添加赛事" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
             <!-- 内容主体区域 -->
-            <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="70px">
-                <!-- 学生学号 -->
-                <el-form-item label="学生学号" prop="matchId">
-                    <el-input v-model="addForm.matchId"></el-input>
+            <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="90px">
+                <!-- 赛事名称 -->
+                <el-form-item label="赛事名称" prop="matchTitle">
+                    <el-input v-model="addForm.matchTitle"></el-input>
                 </el-form-item>
-                <!-- 密码 -->
-                <el-form-item label="密码" prop="matchPwd">
-                    <el-input v-model="addForm.matchPwd"></el-input>
+                <!-- 赛事描述 -->
+                <el-form-item label="赛事描述" prop="textarea">
+                    <el-input type="textarea" :rows="5" placeholder="请输入内容" v-model="addForm.textarea">"></el-input>
                 </el-form-item>
-                <!-- 学生姓名 -->
-                <el-form-item label="学生姓名" prop="studentName">
-                    <el-input v-model="addForm.studentName"></el-input>
+                <el-form-item label="报名时间" required>
+                    <el-col :span="11">
+                        <el-form-item prop="enrollStartTime">
+                            <template>
+                                <div class="block">
+                                    <el-date-picker v-model="addForm.enrollStartTime" type="date" placeholder="报名开始日期">
+                                    </el-date-picker>
+                                </div>
+                            </template>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="line" :span="2">至</el-col>
+                    <el-col :span="11">
+                        <el-form-item prop="enrollEndTime">
+                            <template>
+                                <div class="block">
+                                    <el-date-picker v-model="addForm.enrollEndTime" type="date" placeholder="报名结束日期">
+                                    </el-date-picker>
+                                </div>
+                            </template>
+                        </el-form-item>
+                    </el-col>
                 </el-form-item>
-                <!-- 性别 -->
-                <el-form-item label="性别" prop="studentSex">
+
+
+                <el-form-item label="比赛时间" required>
+                    <el-col :span="11">
+                        <el-form-item prop="matchStartTime">
+                            <template>
+                                <div class="block">
+                                    <el-date-picker v-model="addForm.matchStartTime" type="date" placeholder="比赛开始日期">
+                                    </el-date-picker>
+                                </div>
+                            </template>
+                        </el-form-item>
+                    </el-col>
+                    <el-col class="line" :span="2">至</el-col>
+                    <el-col :span="11">
+                        <el-form-item prop="matchEndTime">
+                            <template>
+                                <div class="block">
+                                    <el-date-picker v-model="addForm.matchEndTime" type="date" placeholder="比赛结束日期">
+                                    </el-date-picker>
+                                </div>
+                            </template>
+                        </el-form-item>
+                    </el-col>
+                </el-form-item>
+                <!-- 主办方 -->
+                <el-form-item label="主办方" prop="sponsor">
+                    <el-input v-model="addForm.sponsor"></el-input>
+                </el-form-item>
+                <!-- 参赛对象 -->
+                <el-form-item label="参赛对象" prop="participant">
                     <template>
-                        <el-radio v-model="queryInfo.radio" label="1">男</el-radio>
-                        <el-radio v-model="queryInfo.radio" label="2">女</el-radio>
+                        <el-checkbox-group v-model="addForm.checkList">
+                            <el-checkbox label="大一"></el-checkbox>
+                            <el-checkbox label="大二"></el-checkbox>
+                            <el-checkbox label="大三"></el-checkbox>
+                            <el-checkbox label="大四"></el-checkbox>
+                        </el-checkbox-group>
                     </template>
+                </el-form-item>
+                <!-- 赛事类型 -->
+                <el-form-item label="赛事类型" prop="matchType">
+
+                    <span class="demonstration" style="margin-left: 10px;">类别: </span>
+                    <el-select v-model="addForm.matchType" placeholder="请选择类别">
+                        <el-option v-for="item in optionsMatchType" :key="item.value" :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <!-- 性别要求 -->
+                <el-form-item label="性别要求" prop="matchSex">
+                    <template>
+                        <el-radio v-model="addForm.matchSex" label="仅限男生">仅限男生</el-radio>
+                        <el-radio v-model="addForm.matchSex" label="仅限女生">仅限女生</el-radio>
+                        <el-radio v-model="addForm.matchSex" label="不限性别">不限性别</el-radio>
+                    </template>
+                </el-form-item>
+                <!-- 参赛规模 -->
+                <el-form-item label="参赛规模" prop="competitionScale">
+                    <el-radio v-model="addForm.competitionScale" label="团体赛事">团体赛事</el-radio>
+                    <el-radio v-model="addForm.competitionScale" label="个人赛事">个人赛事</el-radio>
+                </el-form-item>
+
+                <el-form-item required>
+
+                    <el-row>
+                        <el-col :span="5">
+                            <el-form-item label-width="2" label="共" prop="maxNum">
+                                <el-input style="width: 60px;" v-model="addForm.maxNum"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col class="line" :span="2">队</el-col>
+                        <el-col :span="7">
+                            <el-form-item label="每队" prop="teamPersonNum">
+                                <el-input style="width: 60px;" v-model="addForm.teamPersonNum"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col class="line" :span="2">人</el-col>
+                    </el-row>
+                </el-form-item>
+
+
+                <!-- 奖项设置 -->
+                <el-form-item label="奖项设置" prop="prizeFirst">
+                    <el-input placeholder="一等奖数量" v-model="addForm.prizeFirst"></el-input>
+                </el-form-item>
+                <el-form-item label="奖项设置" prop="prizeSecond">
+                    <el-input placeholder="二等奖数量" v-model="addForm.prizeSecond"></el-input>
+                </el-form-item>
+                <el-form-item label="奖项设置" prop="prizeThird">
+                    <el-input placeholder="三等奖数量" v-model="addForm.prizeThird"></el-input>
+                </el-form-item>
+
+                <!-- 参赛方式 -->
+                <el-form-item label="参赛方式" prop="matchEntry">
+                    <el-input v-model="addForm.matchEntry"></el-input>
                 </el-form-item>
                 <!-- 联系方式 -->
-                <el-form-item label="联系方式" prop="studentPhoneNumber">
-                    <el-input v-model="addForm.studentPhoneNumber"></el-input>
+                <el-form-item label="联系方式" prop="contactPerson">
+                    <el-input v-model="addForm.contactPerson"></el-input>
                 </el-form-item>
-                <!-- 学院 -->
-                <el-form-item label="学院" prop="studentDepartment">
-                    <el-input v-model="addForm.studentDepartment"></el-input>
-                </el-form-item>
-                <!-- 年级 -->
-                <el-form-item label="年级" prop="studentGrade">
-                    <!-- <el-input v-model="addForm.studentGrade"></el-input> -->
-                    <template>
-                        <el-radio v-model="queryInfo.radio2" label="freshman">大一</el-radio>
-                        <el-radio v-model="queryInfo.radio2" label="sophmore">大二</el-radio>
-                        <el-radio v-model="queryInfo.radio2" label="junior">大三</el-radio>
-                        <el-radio v-model="queryInfo.radio2" label="senior">大四</el-radio>
-                    </template>
-                </el-form-item>
-                <!-- 班级 -->
-                <el-form-item label="班级" prop="studentClass">
-                    <el-input v-model="addForm.studentClass"></el-input>
-                </el-form-item>
-                <!-- 团队编号 -->
-                <el-form-item label="团队编号" prop="teamId">
-                    <el-input v-model="addForm.teamId"></el-input>
-                </el-form-item>
-                <!-- 管理员 -->
-                <el-form-item label="管理员" prop="isAdmin">
-                    <el-input v-model="addForm.isAdmin"></el-input>
-                </el-form-item>
+
             </el-form>
             <!-- 内容底部区域 -->
             <span slot="footer" class="dialog-footer">
+                <el-button type="info" @click="resetaddForm">重置</el-button>
                 <el-button @click="addDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addmatch">确 定</el-button>
-            </span>
-        </el-dialog>
-        <!-- 修改赛事对话框 -->
-        <el-dialog title="修改赛事信息" :visible.sync="editDialogVisible" width="50%" @colse="editDialogClosed">
-            <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="70px">
-                <!-- 赛事名 -->
-                <el-form-item label="赛事名" prop="matchname">
-                    <el-input v-model="editForm.matchname" disabled></el-input>
-                </el-form-item>
-                <!-- 密码 -->
-                <el-form-item label="密码" prop="password">
-                    <el-input v-model="editForm.password"></el-input>
-                </el-form-item>
-                <!-- 邮箱 -->
-                <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="editForm.email"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="editDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="editMatchInfo">确 定</el-button>
+                <el-button type="primary" @click="addMatch">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -145,6 +211,16 @@
 export default {
     data() {
         return {
+
+
+            //赛事描述文本
+            textarea: '',
+            //时间选择器设置
+            pickerOptions: {
+                disabledDate(time) {
+                    return time.getTime() > Date.now();
+                },
+            },
             // 请求数据
             queryInfo: {
                 // id: "",
@@ -152,11 +228,13 @@ export default {
                 pageNum: 1,
                 pageSize: 4,
                 department: "", //学院
+
             },
-            matchlist: [], // 赛事列表
+
+            matchlist: [], // 表格显示赛事列表
             options: [
                 {
-                    //学院
+                    //赛事状态
                     value: "已结束",
                     label: "已结束",
                 },
@@ -170,13 +248,49 @@ export default {
                 },
 
             ],
+            optionsMatchType: [
+                {
+                    value: "文艺",
+                    label: "文艺",
+                },
+                {
+                    value: "科技",
+                    label: "科技",
+                },
+            ],
+
+
             total: 0, // 最大数据记录
             addDialogVisible: false, // 对话框显示
             // 添加赛事表单项
             addForm: {
-                matchname: "",
-                password: "",
-                email: "",
+                checkList: [],//多选 大一..大四
+                matchTitle: "",
+                matchInfo: "",
+                enrollStartTime: "",
+                enrollEndTime: "",
+                matchStatTime: "",
+                matchEndTime: "",
+                sponsor: "",
+                //最大队数
+                maxNum: "",
+                allowFirst: "",
+                allowSecond: "",
+                allowThird: "",
+                allowFourth: "",
+                //队伍人数，可以是一个人一个队伍（如果一个队一个人是个人赛）
+                teamPersonNum: "",
+                //赛事类型
+                matchType: "",
+                prizeFirst: "",
+                prizeSecond: "",
+                prizeThird: "",
+                matchSex: "",
+                //参赛方式
+                matchEntry: "",
+                //联系方式
+                contactPerson: "",
+                competitionScale: "",
             },
             // 控制修改赛事对话框显示/隐藏
             editDialogVisible: false,
@@ -184,17 +298,65 @@ export default {
             editForm: {},
             // 验证规则
             addFormRules: {
-                matchname: [
-                    { required: true, message: "请输入赛事名", trigger: "blur" },
-                    { min: 5, max: 8, message: "长度在 5 到 8 个字符", trigger: "blur" },
+                matchTitle: [
+                    { required: true, message: "请输入赛事名称", trigger: "blur" },
                 ],
-                password: [
-                    { required: true, message: "请输入密码", trigger: "blur" },
-                    { min: 6, max: 8, message: "长度在 6 到 8 个字符", trigger: "blur" },
+                textarea: [
+                    { required: true, message: "请对赛事描述", trigger: "blur" },
                 ],
-                email: [
-                    { required: true, message: "请输入邮箱", trigger: "blur" },
-                    { min: 5, max: 15, message: "请输入正确邮箱地址", trigger: "blur" },
+                enrollTime: [
+                    { required: true, message: "请选择报名时间", trigger: "blur" },
+                ],
+                matchTime: [
+                    { required: true, message: "请选择比赛时间", trigger: "blur" },
+                ],
+                sponsor: [
+                    { required: true, message: "请输入主办方", trigger: "blur" },
+                ],
+                //大一、大二、大三、大四
+                participant: [
+                    { required: true, message: "请选择参赛对象", trigger: "blur" },
+                ],
+                matchType: [
+                    { required: true, message: "请选择赛事类型", trigger: "blur" },
+                ],
+                matchSex: [
+                    { required: true, message: "请选择性别要求", trigger: "blur" },
+                ],
+                matchStartTime: [
+                    { required: true, message: "请选择比赛开始时间", trigger: "blur" },
+                ],
+                matchEndTime: [
+                    { required: true, message: "请选择比赛结束时间", trigger: "blur" },
+                ],
+                enrollStartTime: [
+                    { required: true, message: "请选择报名开始时间", trigger: "blur" },
+                ],
+                enrollEndTime: [
+                    { required: true, message: "请选择报名结束时间", trigger: "blur" },
+                ],
+
+                maxNum: [
+                    { required: true, message: "请输入队数", trigger: "blur" },
+                ],
+                teamPersonNum: [
+                    { required: true, message: "请输入人数", trigger: "blur" },
+                ],
+                prizeFirst: [
+                    { required: true, message: "请输入一等奖", trigger: "blur" },
+                ],
+                prizeSecond: [
+                    { required: true, message: "请输入二等奖", trigger: "blur" },
+                ],
+                prizeThird: [
+                    { required: true, message: "请输入三等奖", trigger: "blur" },
+                ],
+
+                matchEntry: [
+                    { required: true, message: "请输入参赛方式", trigger: "blur" },
+                ],
+                contactPerson: [
+                    { required: true, message: "请输入联系方式", trigger: "blur" },
                 ],
             },
             // 修改赛事表单验证规则
@@ -213,7 +375,39 @@ export default {
     created() {
         this.getMatchesList();
     },
+
+    filters: {
+        formatDate(nowTime) {
+            var moment = require("moment");
+            return moment(nowTime).format("YYYY-MM-DD");
+        },
+    },
+
     methods: {
+
+
+        formatDate(row, column) {
+            // 获取单元格数据
+            let data = row[column.property];
+            if (data == null) {
+                return null;
+            }
+            let dt = new Date(data);
+            return (
+                dt.getFullYear() +
+                "-" +
+                (dt.getMonth() + 1) +
+                "-" +
+                dt.getDate() +
+                " " +
+                dt.getHours() +
+                ":" +
+                dt.getMinutes() +
+                ":" +
+                dt.getSeconds()
+            );
+        },
+
         async getMatchesList() {
             // 调用post请求
             const { data: res } = await this.$http.get("allMatches", {
@@ -221,6 +415,9 @@ export default {
             });
             this.matchlist = res.data; // 将返回数据赋值
             this.total = res.numbers; // 总个数
+        },
+        resetaddForm() {
+            this.$refs.addFormRef.resetFields();
         },
         // 监听pageSize改变的事件(更改变每页显示条数时)
         handleSizeChange(newSize) {
@@ -249,6 +446,7 @@ export default {
         },
         // 添加赛事
         addMatch() {
+            console.log('ref', this.$refs.addFormRef);
             this.$refs.addFormRef.validate(async (valid) => {
                 if (!valid) return;
                 // 发起请求
@@ -317,5 +515,10 @@ export default {
         },
     },
 };
+
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+:v-deep .el-col el-col-12 {
+    padding-left: 0;
+}
+</style>

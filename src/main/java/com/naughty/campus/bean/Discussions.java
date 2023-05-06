@@ -11,10 +11,11 @@ import lombok.ToString;
 @ToString
 public class Discussions {
 
-    private String discussion;
+    private String discussionId;
     private String studentId;
     private String studentName;
     private String publishTime;
     private String content;
-
+    private String responder;
+    private String reply;
 }
