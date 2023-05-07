@@ -8,8 +8,8 @@ import User from '../components/admin/User.vue'
 import Manager from '../components/admin/Manager.vue'
 import Matches from '../components/admin/Matches.vue'
 import Discussions from '../components/admin/Discussions.vue'
-import MatchScore from '../components/admin/MatchScore.vue'
-import Participant from '../components/admin/Participant.vue'
+import IndividualMatches from '../components/admin/IndividualMatches.vue'
+import TeamMatches from '../components/admin/TeamMatches.vue'
 import SystemManager from '../components/admin/SystemManager.vue'
 
 Vue.use(VueRouter)
@@ -60,7 +60,7 @@ const routes = [
     component: Home,
     redirect: '/welcome',
     children: [
-      { path: '/welcome', component: Welcome }, { path: '/matchscore', component: MatchScore },
+      { path: '/welcome', component: Welcome }, { path: '/individualmatches', component: IndividualMatches },
     ],
   },
   {
@@ -68,7 +68,7 @@ const routes = [
     component: Home,
     redirect: '/welcome',
     children: [
-      { path: '/welcome', component: Welcome }, { path: '/participant', component: Participant },
+      { path: '/welcome', component: Welcome }, { path: '/teammatches', component: TeamMatches },
     ],
   },
   {

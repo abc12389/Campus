@@ -11,10 +11,7 @@ import java.util.List;
 public interface AdminDao {
 
     public int getAdminByMassage(@Param("name") String username, @Param("pwd") String password);
-    /*public List<Admins> getAllAdmin(@Param("info") QueryInfo info);*/
-/*    public int getAdminCounts(@Param("info") QueryInfo info);*/
     public int addAdmin(Admin admin);
     public Admin getUpdateAdmin(int id);
-    /*public int editAdmin(Admin user);*/
     public int deleteAdmin(int id);
 }

@@ -1,10 +1,9 @@
 <template>
     <div>
-
         <el-card>
             <el-row :gutter="10">
                 <el-col :span="5">
-                    <el-select v-model="queryInfo.department" placeholder="请选择学院">
+                    <el-select v-model="queryInfo.department" clearable placeholder="请选择学院">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
@@ -25,22 +24,19 @@
                 :cell-style="{ 'text-align': 'center' }" border stripe>
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="学号" width="170" prop="userId" alin></el-table-column>
-                <!-- <el-table-column label="密码" width="90" prop="userPwd"></el-table-column> -->
                 <el-table-column label="姓名" width="90" prop="studentName"></el-table-column>
                 <el-table-column label="性别" width="90" prop="studentSex"></el-table-column>
                 <el-table-column label="学院" width="170" prop="studentDepartment"></el-table-column>
-                <!-- <el-table-column label="年级" width="90" prop="studentGrade"></el-table-column> -->
-                <!-- <el-table-column label="班级" width="60" prop="studentClass"></el-table-column> -->
                 <el-table-column label="手机号码" prop="studentPhoneNumber"></el-table-column>
-                <el-table-column label="管理员" prop="isAdmin"></el-table-column>
+                <el-table-column label="管理员" prop="isAdmin" :formatter="isAdminFormatter"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <!-- 修改 -->
                         <el-button type="primary" icon="el-icon-edit" style="background-color: grey; border-color: grey;"
-                            circle size="mini" @click="showEditDialog(scope.row.id)"></el-button>
+                            circle size="mini" @click="showUpdateDialog(scope.row.userid)"></el-button>
                         <!-- 删除 -->
                         <el-button type="danger" icon="el-icon-delete" circle size="mini"
-                            @click="deleteUser(scope.row.id)"></el-button>
+                            @click="deleteManager(scope.row.userid)"></el-button>
 
                     </template>
                 </el-table-column>
@@ -53,64 +49,66 @@
 
 
         <!-- 修改学生管理员对话框 -->
-        <el-dialog title="修改学生管理员信息" :visible.sync="editDialogVisible" width="50%" @colse="editDialogClosed">
-            <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="70px">
+        <el-dialog title="修改学生管理员信息" :visible.sync="updateDialogVisible" width="50%" @colse="updateDialogClosed">
+            <el-form :model="updateForm" ref="updateFormRef" label-width="70px">
                 <!-- 学生学号 -->
                 <el-form-item label="学生学号" prop="userId">
-                    <el-input v-model="editForm.userId"></el-input>
+                    <el-input v-model="updateForm.userId"></el-input>
                 </el-form-item>
                 <!-- 密码 -->
                 <el-form-item label="密码" prop="userPwd">
-                    <el-input v-model="editForm.userPwd"></el-input>
+                    <el-input v-model="updateForm.userPwd"></el-input>
                 </el-form-item>
                 <!-- 学生姓名 -->
                 <el-form-item label="学生姓名" prop="studentName">
-                    <el-input v-model="editForm.studentName"></el-input>
+                    <el-input v-model="updateForm.studentName"></el-input>
                 </el-form-item>
                 <!-- 性别 -->
                 <el-form-item label="性别" prop="studentSex">
                     <template>
-                        <el-radio v-model="queryInfo.radio" label="1">男</el-radio>
-                        <el-radio v-model="queryInfo.radio" label="2">女</el-radio>
+                        <el-radio v-model="updateForm.studentSex" label="男">男</el-radio>
+                        <el-radio v-model="updateForm.studentSex" label="女">女</el-radio>
                     </template>
                 </el-form-item>
                 <!-- 联系方式 -->
                 <el-form-item label="联系方式" prop="studentPhoneNumber">
-                    <el-input v-model="editForm.studentPhoneNumber"></el-input>
+                    <el-input v-model="updateForm.studentPhoneNumber"></el-input>
                 </el-form-item>
                 <!-- 学院 -->
                 <el-form-item label="学院" prop="studentDepartment">
-                    <el-select v-model="editForm.department" placeholder="请选择学院">
+                    <el-select v-model="updateForm.studentDepartment" placeholder="请选择学院">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <!-- 年级 -->
                 <el-form-item label="年级" prop="studentGrade">
-
                     <template>
-                        <el-radio v-model="queryInfo.radio2" label="freshman">大一</el-radio>
-                        <el-radio v-model="queryInfo.radio2" label="sophmore">大二</el-radio>
-                        <el-radio v-model="queryInfo.radio2" label="junior">大三</el-radio>
-                        <el-radio v-model="queryInfo.radio2" label="senior">大四</el-radio>
+                        <el-radio v-model="updateForm.studentGrade" label="大一">大一</el-radio>
+                        <el-radio v-model="updateForm.studentGrade" label="大二">大二</el-radio>
+                        <el-radio v-model="updateForm.studentGrade" label="大三">大三</el-radio>
+                        <el-radio v-model="updateForm.studentGrade" label="大四">大四</el-radio>
                     </template>
                 </el-form-item>
                 <!-- 班级 -->
                 <el-form-item label="班级" prop="studentClass">
-                    <el-input placeholder="请输入阿拉伯数字" v-model="editForm.studentClass"></el-input>
+                    <el-input placeholder="请输入阿拉伯数字" v-model="updateForm.studentClass"></el-input>
                 </el-form-item>
                 <!-- 团队编号 -->
                 <el-form-item label="团队编号" prop="teamId">
-                    <el-input v-model="editForm.teamId"></el-input>
+                    <el-input v-model="updateForm.teamId"></el-input>
                 </el-form-item>
                 <!-- 管理员 -->
                 <el-form-item label="管理员" prop="isAdmin">
-                    <el-input v-model="editForm.isAdmin"></el-input>
+                    <template>
+                        <el-radio v-model="updateForm.isAdmin" label="是">是</el-radio>
+                        <el-radio v-model="updateForm.isAdmin" label="否">否</el-radio>
+                    </template>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="editUserInfo">确 定</el-button>
+                <el-button @click="updateDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="updateManagerInfo">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -178,21 +176,15 @@ export default {
             total: 0, // 最大数据记录
 
             // 控制修改学生管理员对话框显示/隐藏
-            editDialogVisible: false,
+            updateDialogVisible: false,
             // 修改学生管理员信息
-            editForm: {
-
-            },
-            // 修改学生管理员表单验证规则
-            editFormRules: {
-                userPwd: [
-                    { required: true, message: "请输入密码", trigger: "blur" },
-                    { min: 6, max: 8, message: "长度在 6 到 8 个字符", trigger: "blur" },
-                ],
-                studentPhoneNumber: [
-                    { required: true, message: "请输入联系方式", trigger: "blur" },
-                    { min: 5, max: 15, message: "请输入正确联系方式", trigger: "blur" },
-                ],
+            updateForm: {
+                userId: "",
+                studentName: "",
+                studentSex: "",
+                studentDepartment: "",
+                studentPhoneNumber: "",
+                isAdmin: "",
             },
         };
     },
@@ -200,6 +192,14 @@ export default {
         this.getStuManagerList();
     },
     methods: {
+        isAdminFormatter(row, column) {
+            const isAdmin = row.isAdmin
+            if (isAdmin == 0) {
+                return '否'
+            } else if (isAdmin == 1) {
+                return '是'
+            }
+        },
         async getStuManagerList() {
             // 调用post请求
             const { data: res } = await this.$http.get("allStuManager", {
@@ -218,39 +218,31 @@ export default {
             this.queryInfo.pageNum = newPage;
             this.getStuManagerList(); // 数据发生改变重新申请数据
         },
-
-
         // 展示修改框
-        async showEditDialog(id) {
-            const { data: res } = await this.$http.get("getUpdate?id=" + id);
-            // if (res != "success") {
-            // userinfo.state = !userinfo.state;
-            // return this.$message.error("操作失败！！！");
-            // }
-            // this.$message.success("操作成功！！！");
-
-            this.editForm = res;
-            this.editDialogVisible = true;
+        async showUpdateDialog(id) {
+            const { data: res } = await this.$http.get("getUpdateStuManager?id=" + id);
+            this.updateForm = res;
+            this.updateDialogVisible = true;
         },
         // 关闭窗口
-        editDialogClosed() {
-            this.$refs.editFormRef.resetFields();
+        updateDialogClosed() {
+            this.$refs.updateFormRef.resetFields();
         },
         // 确认修改
-        editUserInfo() {
-            this.$refs.editFormRef.validate(async (valid) => {
+        updateManagerInfo() {
+            this.$refs.updateFormRef.validate(async (valid) => {
                 if (!valid) return;
                 // 发起请求
-                const { data: res } = await this.$http.put("editStuManager", this.editForm);
+                const { data: res } = await this.$http.put("updateStuManager", this.updateForm);
                 if (res != "success") return this.$message.error("操作失败！！！");
                 this.$message.success("操作成功！！！");
                 //隐藏
-                this.editDialogVisible = false;
+                this.updateDialogVisible = false;
                 this.getStuManagerList();
             });
         },
         // 删除按钮
-        async deleteUser(id) {
+        async deleteManager(id) {
             // 弹框
             const confirmResult = await this.$confirm(
                 "此操作将永久删除该学生管理员, 是否继续?",

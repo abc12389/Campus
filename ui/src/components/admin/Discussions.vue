@@ -227,17 +227,6 @@ export default {
             this.queryInfo.pageNum = newPage;
             this.getDiscussionsList(); // 数据发生改变重新申请数据
         },
-        // 修改用户状态
-        async discussionsStateChanged(discussionsinfo) {
-            const { data: res } = await this.$http.put(
-                `discussionsState?id=${discussionsinfo.id}&state=${discussionsinfo.state}`
-            );
-            if (res != "success") {
-                discussionsinfo.state = !discussionsinfo.state;
-                return this.$message.error("操作失败！！！");
-            }
-            this.$message.success("操作成功！！！");
-        },
         // 监听添加用户
         addDialogClosed() {
             this.$refs.addFormRef.resetFields(); // 关闭对话框的时候应该重置表单项，否则下一次再打开会有数据留在那里

@@ -18,5 +18,6 @@ public class QueryInfo {
     private String matchTitle;//赛事名称
     private String content;//发表内容
     private String studentName;//学生姓名
-
+    private int IsAdmin;//学生姓名
+    private String status;//审核状态
 }

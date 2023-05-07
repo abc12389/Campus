@@ -14,7 +14,11 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: classpath*:/mapper/**/*.xml
-  type-aliases-package: com.example.demo.domain
+  type-aliases-package: com.naughty.campus.bean
+#
 
+logging:
+  level:
+    com.naughty.campus.dao: info
 server:
   port: 9000

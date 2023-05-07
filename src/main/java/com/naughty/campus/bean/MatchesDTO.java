@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.sql.Date;
 import java.util.List;
 
 @Data
@@ -13,18 +12,20 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class MatchesDTO {
+    private long matchId;
     private String matchTitle;
     private String matchInfo;
-    private Date enrollStartTime;
-    private Date enrollEndTime;
-    private Date matchStartTime;
-    private Date matchEndTime;
+    private java.sql.Date enrollStartTime;
+    private java.sql.Date enrollEndTime;
+    private java.sql.Date matchStartTime;
+    private java.sql.Date matchEndTime;
     private String sponsor;
     private long maxNum;
-    private long allowFirst;
-    private long allowSecond;
-    private long allowThird;
-    private long allowFourth;
+    private String textarea;//赛事描述
+    private int allowFirst;
+    private int allowSecond;
+    private int allowThird;
+    private int allowFourth;
     private long teamPersonNum;
     private String matchType;
     private String prizeFirst;

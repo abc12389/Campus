@@ -3,7 +3,7 @@
         <el-card>
             <el-row :gutter="10">
                 <el-col :span="4">
-                    <el-select v-model="queryInfo.matchStatus" placeholder="请选择赛事状态">
+                    <el-select v-model="queryInfo.matchStatus" clearable placeholder="请选择赛事状态">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
@@ -18,7 +18,7 @@
                         @click="getMatchesList">搜索</el-button>
                 </el-col>
                 <el-col :span="4">
-                    <el-button type="primary" style="margin-left: 10px;" @click="addDialogVisible = true">添加赛事</el-button>
+                    <el-button type="primary" style="margin-left: 10px;" @click="showAddDialog">添加赛事</el-button>
                 </el-col>
             </el-row>
             <!-- 赛事列表 -->
@@ -28,27 +28,25 @@
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="赛事名称" width="200" prop="matchTitle"></el-table-column>
                 <el-table-column label="赛事类型" width="100" prop="matchType"></el-table-column>
-                <el-table-column label="报名时间" prop="enrollStartTime,enrollEndTime" :formatter="formatDate">
+                <el-table-column label="报名时间" prop="enrollStartTime,enrollEndTime">
                     <template slot-scope="scope">
-                        {{ scope.row.enrollStartTime }} - {{ scope.row.enrollEndTime }}
+                        {{ scope.row.enrollStartTime | formatDate }} 至 {{ scope.row.enrollEndTime | formatDate }}
                     </template>
                 </el-table-column>
                 <el-table-column label="比赛时间" prop="matchStartTime,matchEndTime">
                     <template slot-scope="scope">
-                        {{ scope.row.matchStartTime }} - {{ scope.row.matchEndTime }}
+                        {{ scope.row.matchStartTime | formatDate }} 至 {{ scope.row.matchEndTime | formatDate }}
                     </template>
                 </el-table-column>
-
                 <el-table-column label="赛事状态" width="100" prop="matchStatus"></el-table-column>
                 <el-table-column label="操作" width="120">
                     <template slot-scope="scope">
                         <!-- 修改 -->
                         <el-button type="primary" icon="el-icon-edit" style="background-color: grey; border-color: grey;"
-                            circle size="mini" @click="showEditDialog(scope.row.id)"></el-button>
+                            circle size="mini" @click="showEditDialog(scope.row.matchId)"></el-button>
                         <!-- 删除 -->
                         <el-button type="danger" icon="el-icon-delete" circle size="mini"
-                            @click="deleteMatch(scope.row.id)"></el-button>
-
+                            @click="deleteMatch(scope.row.matchId)"></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -59,7 +57,7 @@
         </el-card>
 
         <!-- 创建新赛事对话框 -->
-        <el-dialog title="添加赛事" :visible.sync="addDialogVisible" width="50%" @close="addDialogClosed">
+        <el-dialog :title="title" :visible.sync="addUpdateDialogVisible" width="50%" @close="addDialogClosed">
             <!-- 内容主体区域 -->
             <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="90px">
                 <!-- 赛事名称 -->
@@ -67,8 +65,8 @@
                     <el-input v-model="addForm.matchTitle"></el-input>
                 </el-form-item>
                 <!-- 赛事描述 -->
-                <el-form-item label="赛事描述" prop="textarea">
-                    <el-input type="textarea" :rows="5" placeholder="请输入内容" v-model="addForm.textarea">"></el-input>
+                <el-form-item label="赛事描述" prop="matchInfo">
+                    <el-input type="textarea" :rows="5" placeholder="请输入内容" v-model="addForm.matchInfo">"></el-input>
                 </el-form-item>
                 <el-form-item label="报名时间" required>
                     <el-col :span="11">
@@ -93,7 +91,6 @@
                         </el-form-item>
                     </el-col>
                 </el-form-item>
-
 
                 <el-form-item label="比赛时间" required>
                     <el-col :span="11">
@@ -123,7 +120,7 @@
                     <el-input v-model="addForm.sponsor"></el-input>
                 </el-form-item>
                 <!-- 参赛对象 -->
-                <el-form-item label="参赛对象" prop="participant">
+                <el-form-item label="参赛对象" prop="checkList">
                     <template>
                         <el-checkbox-group v-model="addForm.checkList">
                             <el-checkbox label="大一"></el-checkbox>
@@ -157,25 +154,22 @@
                     <el-radio v-model="addForm.competitionScale" label="团体赛事">团体赛事</el-radio>
                     <el-radio v-model="addForm.competitionScale" label="个人赛事">个人赛事</el-radio>
                 </el-form-item>
-
                 <el-form-item required>
-
                     <el-row>
                         <el-col :span="5">
                             <el-form-item label-width="2" label="共" prop="maxNum">
-                                <el-input style="width: 60px;" v-model="addForm.maxNum"></el-input>
+                                <el-input style="width: 70px;" type="number" v-model="addForm.maxNum"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col class="line" :span="2">队</el-col>
                         <el-col :span="7">
                             <el-form-item label="每队" prop="teamPersonNum">
-                                <el-input style="width: 60px;" v-model="addForm.teamPersonNum"></el-input>
+                                <el-input style="width: 70px;" type="number" v-model="addForm.teamPersonNum"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col class="line" :span="2">人</el-col>
+                        <el-col class="line" style="margin-left: 10px;" :span="3">人</el-col>
                     </el-row>
                 </el-form-item>
-
 
                 <!-- 奖项设置 -->
                 <el-form-item label="奖项设置" prop="prizeFirst">
@@ -201,20 +195,19 @@
             <!-- 内容底部区域 -->
             <span slot="footer" class="dialog-footer">
                 <el-button type="info" @click="resetaddForm">重置</el-button>
-                <el-button @click="addDialogVisible = false">取 消</el-button>
+                <el-button @click="cancelDialog">取 消</el-button>
                 <el-button type="primary" @click="addMatch">确 定</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
 <script>
+import { TimeSelect } from 'element-ui';
+
 export default {
     data() {
         return {
-
-
-            //赛事描述文本
-            textarea: '',
+            title: "增加",
             //时间选择器设置
             pickerOptions: {
                 disabledDate(time) {
@@ -228,9 +221,7 @@ export default {
                 pageNum: 1,
                 pageSize: 4,
                 department: "", //学院
-
             },
-
             matchlist: [], // 表格显示赛事列表
             options: [
                 {
@@ -258,12 +249,11 @@ export default {
                     label: "科技",
                 },
             ],
-
-
             total: 0, // 最大数据记录
-            addDialogVisible: false, // 对话框显示
+            addUpdateDialogVisible: false, // 增加-对话框显示
             // 添加赛事表单项
             addForm: {
+                matchId: "",
                 checkList: [],//多选 大一..大四
                 matchTitle: "",
                 matchInfo: "",
@@ -274,6 +264,7 @@ export default {
                 sponsor: "",
                 //最大队数
                 maxNum: "",
+                matchInfo: '',//赛事描述
                 allowFirst: "",
                 allowSecond: "",
                 allowThird: "",
@@ -292,16 +283,12 @@ export default {
                 contactPerson: "",
                 competitionScale: "",
             },
-            // 控制修改赛事对话框显示/隐藏
-            editDialogVisible: false,
-            // 修改赛事信息
-            editForm: {},
             // 验证规则
             addFormRules: {
                 matchTitle: [
                     { required: true, message: "请输入赛事名称", trigger: "blur" },
                 ],
-                textarea: [
+                matchInfo: [
                     { required: true, message: "请对赛事描述", trigger: "blur" },
                 ],
                 enrollTime: [
@@ -314,7 +301,7 @@ export default {
                     { required: true, message: "请输入主办方", trigger: "blur" },
                 ],
                 //大一、大二、大三、大四
-                participant: [
+                checkList: [
                     { required: true, message: "请选择参赛对象", trigger: "blur" },
                 ],
                 matchType: [
@@ -359,33 +346,46 @@ export default {
                     { required: true, message: "请输入联系方式", trigger: "blur" },
                 ],
             },
-            // 修改赛事表单验证规则
-            editFormRules: {
-                password: [
-                    { required: true, message: "请输入密码", trigger: "blur" },
-                    { min: 6, max: 8, message: "长度在 6 到 8 个字符", trigger: "blur" },
-                ],
-                email: [
-                    { required: true, message: "请输入邮箱", trigger: "blur" },
-                    { min: 5, max: 15, message: "请输入正确邮箱地址", trigger: "blur" },
-                ],
-            },
         };
     },
     created() {
         this.getMatchesList();
     },
-
     filters: {
-        formatDate(nowTime) {
-            var moment = require("moment");
-            return moment(nowTime).format("YYYY-MM-DD");
+        formatDate(time) {
+            const
+                date = new Date(time),
+                y = date.getFullYear(),
+                m = date.getMonth() + 1,
+                d = date.getDate()
+            return `${y}-${m < 10 ? '0' + m : m}-${d < 10 ? '0' + d : d}`
         },
     },
-
+    watch: {
+        'addForm.competitionScale': {
+            handler(newVal, oldVal) {
+                if (newVal == '团体赛事') {
+                    this.addForm.teamPersonNum = 2
+                } else {
+                    this.addForm.teamPersonNum = 1
+                }
+            },
+            deep: true,
+            immediate: true
+        },
+        'addForm.teamPersonNum': {
+            handler(newVal, oldVal) {
+                if (newVal >= 2) {
+                    this.addForm.competitionScale = '团体赛事'
+                } else {
+                    this.addForm.competitionScale = '个人赛事'
+                }
+            },
+            deep: true,
+            immediate: true
+        }
+    },
     methods: {
-
-
         formatDate(row, column) {
             // 获取单元格数据
             let data = row[column.property];
@@ -407,16 +407,25 @@ export default {
                 dt.getSeconds()
             );
         },
+        cancelDialog() {
+            this.addUpdateDialogVisible = false;
+            this.$refs.addFormRef.resetFields();
 
+        },
         async getMatchesList() {
-            // 调用post请求
+            // 调用get请求
             const { data: res } = await this.$http.get("allMatches", {
                 params: this.queryInfo,
             });
             this.matchlist = res.data; // 将返回数据赋值
             this.total = res.numbers; // 总个数
         },
-        resetaddForm() {
+        async resetaddForm() {
+            if (this.title == "修改") {
+                const { data: res } = await this.$http.get("getUpdate?id=" + this.addForm.matchId);
+                this.addForm = res.data;
+                return
+            }
             this.$refs.addFormRef.resetFields();
         },
         // 监听pageSize改变的事件(更改变每页显示条数时)
@@ -429,49 +438,44 @@ export default {
             this.queryInfo.pageNum = newPage;
             this.getMatchesList(); // 数据发生改变重新申请数据
         },
-        // 修改赛事状态
-        async matchStateChanged(matchinfo) {
-            const { data: res } = await this.$http.put(
-                `matchState?id=${matchinfo.id}&state=${matchinfo.state}`
-            );
-            if (res != "success") {
-                matchinfo.state = !matchinfo.state;
-                return this.$message.error("操作失败！！！");
-            }
-            this.$message.success("操作成功！！！");
-        },
-        // 监听添加赛事
+        // 关闭对话框添加赛事
         addDialogClosed() {
             this.$refs.addFormRef.resetFields(); // 关闭对话框的时候应该重置表单项，否则下一次再打开会有数据留在那里
         },
         // 添加赛事
         addMatch() {
-            console.log('ref', this.$refs.addFormRef);
+            if (this.title == '新增') {
+                // addMatches
+                this.addOrUpdate("addMatches");
+            } else if (this.title == '修改') {
+                this.addOrUpdate("updateMatches");
+            }
+        },
+        async addOrUpdate(url) {
             this.$refs.addFormRef.validate(async (valid) => {
                 if (!valid) return;
                 // 发起请求
-                const { data: res } = await this.$http.post("addMatches", this.addForm);
-                if (res != "success") {
-                    matchinfo.state = !matchinfo.state;
+                const { data: res } = await this.$http.post(url, this.addForm);
+                if (res.code != 200) {
                     return this.$message.error("操作失败！！！");
                 }
                 this.$message.success("操作成功！！！");
                 //隐藏
-                this.addDialogVisible = false;
+                this.addUpdateDialogVisible = false;
                 this.getMatchesList();
             });
         },
+        // 展示添加框
+        showAddDialog() {
+            this.addUpdateDialogVisible = true
+            this.title = "新增"
+        },
         // 展示修改框
         async showEditDialog(id) {
+            this.addUpdateDialogVisible = true
+            this.title = "修改"
             const { data: res } = await this.$http.get("getUpdate?id=" + id);
-            // if (res != "success") {
-            // matchinfo.state = !matchinfo.state;
-            // return this.$message.error("操作失败！！！");
-            // }
-            // this.$message.success("操作成功！！！");
-
-            this.editForm = res;
-            this.editDialogVisible = true;
+            this.addForm = res.data;
         },
         // 关闭窗口
         editDialogClosed() {
@@ -507,10 +511,10 @@ export default {
                 return this.$message.info("已取消删除");
             }
             const { data: res } = await this.$http.delete("deleteMatch?id=" + id);
-            if (res != "success") {
-                return this.$message.error("操作失败！！！");
+            if (res.code != 200) {
+                return this.$message.error("删除失败！！！");
             }
-            this.$message.success("操作成功！！！");
+            this.$message.success("删除成功！！！");
             this.getMatchesList();
         },
     },
