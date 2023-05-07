@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.naughty.campus.dao.TeamMatchesDao">
+
+    <select id="getAllTeamMatches" resultType="com.naughty.campus.bean.TeamMatches">
+        SELECT
+        matchId,matchTitle,teamId,teamName,teamScore,status
+        FROM teammatches
+        where 1=1
+        <if test="info.matchTitle !=null">
+            and matchTitle like #{info.matchTitle}
+        </if>
+        <if test="info.status !=null ">
+            and status = #{info.status}
+        </if>
+        LIMIT #{info.pageNum},#{info.pageSize}
+    </select>
+
+    <select id="getTeamMatchesCounts" resultType="java.lang.Integer">
+        SELECT count(*) FROM `teammatches` where 1=1
+        <if test="info.matchTitle !=null ">
+            and matchTitle like #{info.matchTitle}
+        </if>
+        <if test="info.status !=null ">
+            and status = #{info.status}
+        </if>
+
+    </select>
+</mapper>
