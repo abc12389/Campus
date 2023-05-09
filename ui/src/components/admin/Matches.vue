@@ -73,7 +73,8 @@
                         <el-form-item prop="enrollStartTime">
                             <template>
                                 <div class="block">
-                                    <el-date-picker v-model="addForm.enrollStartTime" type="date" placeholder="报名开始日期">
+                                    <el-date-picker v-model="addForm.enrollStartTime" type="date" placeholder="报名开始日期"
+                                        format="yyyy-MM-dd" value-format="yyyy-MM-dd" :picker-options="pickerOptions1">
                                     </el-date-picker>
                                 </div>
                             </template>
@@ -84,7 +85,8 @@
                         <el-form-item prop="enrollEndTime">
                             <template>
                                 <div class="block">
-                                    <el-date-picker v-model="addForm.enrollEndTime" type="date" placeholder="报名结束日期">
+                                    <el-date-picker v-model="addForm.enrollEndTime" type="date" placeholder="报名结束日期"
+                                        format="yyyy-MM-dd" value-format="yyyy-MM-dd" :picker-options="pickerOptions1">
                                     </el-date-picker>
                                 </div>
                             </template>
@@ -97,7 +99,8 @@
                         <el-form-item prop="matchStartTime">
                             <template>
                                 <div class="block">
-                                    <el-date-picker v-model="addForm.matchStartTime" type="date" placeholder="比赛开始日期">
+                                    <el-date-picker v-model="addForm.matchStartTime" type="date" placeholder="比赛开始日期"
+                                        format="yyyy-MM-dd" value-format="yyyy-MM-dd" :picker-options="pickerOptions1">
                                     </el-date-picker>
                                 </div>
                             </template>
@@ -108,7 +111,8 @@
                         <el-form-item prop="matchEndTime">
                             <template>
                                 <div class="block">
-                                    <el-date-picker v-model="addForm.matchEndTime" type="date" placeholder="比赛结束日期">
+                                    <el-date-picker v-model="addForm.matchEndTime" type="date" placeholder="比赛结束日期"
+                                        format="yyyy-MM-dd" value-format="yyyy-MM-dd" :picker-options="pickerOptions1">
                                     </el-date-picker>
                                 </div>
                             </template>
@@ -209,10 +213,10 @@ export default {
         return {
             title: "增加",
             //时间选择器设置
-            pickerOptions: {
-                disabledDate(time) {
-                    return time.getTime() > Date.now();
-                },
+            pickerOptions1: {
+                disabledDate: (time) => {
+                    return time.getTime() < Date.now() - 8.64e7
+                }
             },
             // 请求数据
             queryInfo: {

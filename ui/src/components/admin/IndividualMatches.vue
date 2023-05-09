@@ -183,6 +183,9 @@ export default {
             this.disabled = true
             console.log()
             const { data: res } = await this.$http.get("getUpdateIndMatches?id=" + id);
+            console.log(res);
+
+
             this.updateForm = res.data;
             this.updateDialogVisible = true;
         },
@@ -196,7 +199,8 @@ export default {
                 if (!valid) return;
                 // 发起请求
                 const { data: res } = await this.$http.put("updateIndMatches", this.updateForm);
-                if (res != "success") return this.$message.error("操作失败！！！");
+                console.log('res: ', res)
+                if (res.code != 200) return this.$message.error("操作失败！！！");
                 this.$message.success("操作成功！！！");
                 //隐藏
                 this.updateDialogVisible = false;
@@ -220,7 +224,7 @@ export default {
                 return this.$message.info("已取消删除");
             }
             const { data: res } = await this.$http.delete("deleteIndMatches?id=" + id);
-            if (res != "success") {
+            if (res.code != 200) {
                 return this.$message.error("操作失败！！！");
             }
             this.$message.success("操作成功！！！");

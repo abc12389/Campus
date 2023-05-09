@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class TeamMatchesDTO {
 
-    private String matchId;
+    private int matchId;
     private String matchTitle;
     private String teamId;
     private String teamScore;

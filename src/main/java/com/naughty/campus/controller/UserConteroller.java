@@ -88,7 +88,7 @@ public class UserConteroller {
 
 
     @RequestMapping("/deleteUser")
-    public ResponseResult<String> deleteUser(int id) {
+    public ResponseResult<String> deleteUser(String id) {
         int i = userDao.deleteById(id);
         return new ResponseResult<String>(200, "删除成功", null);
     }

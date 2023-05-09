@@ -3,14 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.naughty.campus.dao.DiscussionDao">
-    <!--    <select id="getDiscussionsByMassage" resultType="java.lang.Integer">
-               SELECT count(id) FROM easyDiscussions
-               WHERE discussionsname=#{discussionsname} AND password=#{password}
-        </select>-->
 
-    <select id="getAllDiscussion" resultType="com.naughty.campus.bean.Discussions">
+    <select id="getAllDiscussions" resultType="com.naughty.campus.bean.Discussions">
         SELECT
-               studentId,studentName,publishTime,content,responder,reply
+               discussionId,studentId,studentName,publishTime,disContent,responder,reply
         FROM
              discussions
         WHERE 1=1
@@ -18,45 +14,19 @@
         <if test="info.studentName !=null">
             and studentName like #{info.studentName}
         </if>
-        <if test="info.content !=null ">
-            and content like #{info.content}
+        <if test="info.disContent !=null ">
+            and disContent like #{info.disContent}
         </if>
         LIMIT #{info.pageNum},#{info.pageSize}
     </select>
 
     <select id="getDiscussionsCounts" resultType="java.lang.Integer">
-        SELECT count(*) FROM 'discussions'
-           <if test="info.studentName !=null ">
+        SELECT count(*) FROM `discussions`
+           <if test="info.studentName !=null">
             and studentName like #{info.studentName}
         </if>
-        <if test="info.content !=null ">
-            and content like #{info.content}
+        <if test="info.disContent !=null ">
+            and disContent like #{info.disContent}
         </if>
-
     </select>
-
-    <!--    <select id="getUpdateDiscussions" resultType="com.naughty.campus.bean.Discussions">-->
-    <!--        SELECT * FROM easydiscussions WHERE id = #{id}-->
-    <!--    </select>-->
-
-    <!-- <update id="updateState">
-         UPDATE easydiscussions SET state = #{state} WHERE id = #{id}
-     </update>
-
-     <insert id="addDiscussions">
-         INSERT INTO easydiscussions
-         (discussionsname,password,email,role,state)
-         VALUE
-         (#{discussionsname},#{password},#{email},#{role},#{state})
-     </insert>
-
-     <update id="editDiscussions">
-         UPDATE easydiscussions SET discussionsname = #{discussionsname} , password = #{password} ,
-         email = #{email} WHERE id = #{id}
-     </update>
-
-     <delete id="deleteDiscussions">
-         DELETE FROM easydiscussions WHERE id = #{id}
-     </delete>-->
-
 </mapper>

@@ -16,8 +16,10 @@ public class QueryInfo {
     private String department;//学院
     private String matchStatus;//赛事状态
     private String matchTitle;//赛事名称
-    private String content;//发表内容
+    private String disContent;//发表内容
+    private String Content;//发表内容
     private String studentName;//学生姓名
-    private int IsAdmin;//学生姓名
+    private String studentId;//学生学号
+    private int IsAdmin;
     private String status;//审核状态
 }

@@ -33,10 +33,10 @@
                     <template slot-scope="scope">
                         <!-- 修改 -->
                         <el-button type="primary" icon="el-icon-edit" style="background-color: grey; border-color: grey;"
-                            circle size="mini" @click="showUpdateDialog(scope.row.userid)"></el-button>
+                            circle size="mini" @click="showUpdateDialog(scope.row.userId)"></el-button>
                         <!-- 删除 -->
                         <el-button type="danger" icon="el-icon-delete" circle size="mini"
-                            @click="deleteManager(scope.row.userid)"></el-button>
+                            @click="deleteStuManager(scope.row.userId)"></el-button>
 
                     </template>
                 </el-table-column>
@@ -242,7 +242,7 @@ export default {
             });
         },
         // 删除按钮
-        async deleteManager(id) {
+        async deleteStuManager(id) {
             // 弹框
             const confirmResult = await this.$confirm(
                 "此操作将永久删除该学生管理员, 是否继续?",
@@ -258,7 +258,7 @@ export default {
                 return this.$message.info("已取消删除");
             }
             const { data: res } = await this.$http.delete("deleteStuManager?id=" + id);
-            if (res != "success") {
+            if (res != 200) {
                 return this.$message.error("操作失败！！！");
             }
             this.$message.success("操作成功！！！");

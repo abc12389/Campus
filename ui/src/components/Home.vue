@@ -1,11 +1,11 @@
 <template>
   <el-container class="home-container">
     <!--头部布局-->
-    <el-header style="background-color: #393d49">
-      <div style="color:#009688">
+    <el-header style="background-color: #EBEEF5">
+      <div style="color:#fbf8ff">
         <span>校园赛事管理系统</span>
       </div>
-      <el-button type="info" @click="logout">退出登录</el-button>
+      <el-button style="background-color: rgb(161, 157, 176);" type="info" @click="logout">退出登录</el-button>
     </el-header>
     <el-container>
       <!--侧边布局-->
@@ -18,7 +18,7 @@
            router开启路由 active-text-color 颜色--
            :collapse="isCollapse" 是否变小 -->
         <!-- 取消伸缩动画 -->
-        <el-menu background-color="rgb(57,61,73)" text-color="#fff" active-text-color="#409eff" unique-opened
+        <el-menu background-color="#EBEEF5" text-color="#fff" active-text-color="#faab43" unique-opened
           :collapse="isCollapse" :collapse-transition="false" :router="true" :default-active="activePath">
           <template v-for="item in menuList">
             <el-submenu v-if="item.slist.length > 0" :index="item.id + ''" :key="item.id">
@@ -54,6 +54,7 @@
 export default {
   data() {
     return {
+
       // 左侧菜单
       menuList: [],
       iconsObject: {
@@ -106,13 +107,14 @@ export default {
 </script>
 <style lang="less" scoped>
 .el-header {
-  background-color: #373d41;
+  background-color: #EBEEF5;
   display: flex;
   justify-content: space-between; // 左右贴边
   padding-left: 0%; // 左边界
   align-items: center; // 水平
   color: #fff;
-  font-size: 20px;
+  font-size: 25px;
+
 
   >div {
     //左侧div加布局
@@ -126,7 +128,8 @@ export default {
 }
 
 .el-aside {
-  background-color: #333744;
+  background-color: #EBEEF5;
+  ;
 
   .el-menu {
     border-right: none; // 对其右边框
@@ -151,12 +154,12 @@ export default {
 }
 
 .toggle-button {
-  background-color: #009688;
-  font-size: 10px;
-  line-height: 24px;
+  background-color: #EBEEF5;
+  font-size: 20px;
+  line-height: 30px;
   color: #fff;
   text-align: center;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.5em;
   cursor: pointer; // 显示鼠标指针为：小手
 }
 </style>

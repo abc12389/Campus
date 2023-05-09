@@ -16,7 +16,7 @@ import lombok.ToString;
 public class IndMatches {
     @TableId("matchId")
     @TableField(value = "matchId")
-    private String matchId;
+    private int matchId;
      @TableField("matchTitle")
     private String matchTitle;
     @TableField("studentId")

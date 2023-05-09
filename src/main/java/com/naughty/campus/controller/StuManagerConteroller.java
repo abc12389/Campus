@@ -33,6 +33,7 @@ public class StuManagerConteroller {
         } else {
             queryInfo.setStudentName(null);
         }
+
         int numbers = stumanagerDao.getStuManagerCounts(queryInfo);// 获取数据总数
         int pageStart = (queryInfo.getPageNum() - 1) * queryInfo.getPageSize();
         queryInfo.setPageNum(pageStart);
@@ -44,4 +45,11 @@ public class StuManagerConteroller {
         String stumangers_json = JSON.toJSONString(res);
         return stumangers_json;
     }
+
+    @RequestMapping("/deleteStuManager")
+    public ResponseResult<String> deleteStuManager(String id) {
+        int i = stumanagerDao.deleteById(id);
+        return new ResponseResult<String>(200, "删除成功", null);
+    }
+
 }

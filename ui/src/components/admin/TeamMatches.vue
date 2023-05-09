@@ -24,10 +24,10 @@
                 :cell-style="{ 'text-align': 'center' }" border stripe>
                 <el-table-column type="index"></el-table-column>
                 <el-table-column label="赛事编号" width="140" prop="matchId" alin></el-table-column>
-                <el-table-column label="赛事名称" width="280" prop="matchTitle" alin></el-table-column>
+                <el-table-column label="赛事名称" width="290" prop="matchTitle" alin></el-table-column>
                 <el-table-column label="团队编号" width="90" prop="teamId"></el-table-column>
                 <el-table-column label="团队名称" width="140" prop="teamName"></el-table-column>
-                <el-table-column label="成绩" width="100" prop="teamScore"></el-table-column>
+                <el-table-column label="成绩" width="90" prop="teamScore"></el-table-column>
                 <el-table-column label="报名状态" width="100" prop="status" :formatter="statusFormatter"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -61,16 +61,16 @@
                     <el-input v-model="updateForm.matchTitle" :disabled="disabled"></el-input>
                 </el-form-item>
                 <!-- 团队编号 -->
-                <el-form-item label="团队编号" prop="TeamId">
-                    <el-input v-model="updateForm.TeamId" :disabled="disabled"></el-input>
+                <el-form-item label="团队编号" prop="teamId">
+                    <el-input v-model="updateForm.teamId" :disabled="disabled"></el-input>
                 </el-form-item>
                 <!-- 团队名称 -->
-                <el-form-item label="团队名称" prop="TeamNamme">
-                    <el-input v-model="updateForm.TeamNamme" :disabled="disabled"></el-input>
+                <el-form-item label="团队名称" prop="teamName">
+                    <el-input v-model="updateForm.teamName" :disabled="disabled"></el-input>
                 </el-form-item>
                 <!-- 成绩 -->
-                <el-form-item label="成绩" prop="TeamScore">
-                    <el-input v-model="updateForm.TeamScore"></el-input>
+                <el-form-item label="成绩" prop="teamScore">
+                    <el-input v-model="updateForm.teamScore"></el-input>
                 </el-form-item>
                 <!-- 报名状态 -->
                 <el-form-item label="报名状态" prop="status">
@@ -95,7 +95,7 @@ export default {
     data() {
         return {
 
-            disabled: false,//修改的时候不能修改学号
+            disabled: false,//修改的时候不能修改
             // 请求数据
             queryInfo: {
                 status: "",
@@ -202,7 +202,7 @@ export default {
                 if (!valid) return;
                 // 发起请求
                 const { data: res } = await this.$http.put("updateTeamMatches", this.updateForm);
-                if (res != "success") return this.$message.error("操作失败！！！");
+                if (res.code != "success") return this.$message.error("操作失败！！！");
                 this.$message.success("操作成功！！！");
                 //隐藏
                 this.updateDialogVisible = false;
@@ -226,7 +226,7 @@ export default {
                 return this.$message.info("已取消删除");
             }
             const { data: res } = await this.$http.delete("deleteTeamMatches?id=" + id);
-            if (res != "success") {
+            if (res.code != "success") {
                 return this.$message.error("操作失败！！！");
             }
             this.$message.success("操作成功！！！");

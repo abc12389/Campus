@@ -37,7 +37,6 @@ public class MatchesController {
             queryInfo.setMatchTitle(null);
         }
 
-
         int numbers = matchesDao.getMatchesCounts(queryInfo);// 获取数据总数
         int pageStart = (queryInfo.getPageNum() - 1) * queryInfo.getPageSize();
         queryInfo.setPageNum(pageStart);

@@ -23,7 +23,7 @@
     </select>
 
     <select id="getStuManagerCounts" resultType="java.lang.Integer">
-        SELECT count(*) FROM `users` where 1=1
+        SELECT count(*) FROM `users` where 1=1 and isAdmin=1
         <if test="info.studentName !=null ">
             and studentName like #{info.studentName}
         </if>
