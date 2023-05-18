@@ -23,19 +23,21 @@
             <el-table :data="indMatcheslist" :header-cell-style="{ 'text-align': 'center' }"
                 :cell-style="{ 'text-align': 'center' }" border stripe>
                 <el-table-column type="index"></el-table-column>
-                <el-table-column label="赛事编号" width="140" prop="matchId" alin></el-table-column>
-                <el-table-column label="赛事名称" width="280" prop="matchTitle" alin></el-table-column>
-                <el-table-column label="学号" width="180" prop="studentId"></el-table-column>
-                <el-table-column label="成绩" width="140" prop="studentScore"></el-table-column>
+                <el-table-column label="赛事编号" width="80" prop="matchId"></el-table-column>
+                <el-table-column label="赛事名称" width="280" prop="matchTitle"></el-table-column>
+                <el-table-column label="学号" width="150" prop="studentId"></el-table-column>
+                <el-table-column label="姓名" width="80" prop="studentName"></el-table-column>
+                <el-table-column label="成绩" width="80" prop="studentScore"></el-table-column>
+                <el-table-column label="排名" width="80" prop="studentPlace"></el-table-column>
                 <el-table-column label="报名状态" width="120" prop="status" :formatter="statusFormatter"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <!-- 修改 -->
                         <el-button type="primary" icon="el-icon-edit" style="background-color: grey; border-color: grey;"
-                            circle size="mini" @click="showUpdateDialog(scope.row.matchId)"></el-button>
+                            circle size="mini" @click="showUpdateDialog(scope.row.id)"></el-button>
                         <!-- 删除 -->
                         <el-button type="danger" icon="el-icon-delete" circle size="mini"
-                            @click="deleteIndMatches(scope.row.matchId)"></el-button>
+                            @click="deleteIndMatches(scope.row.id)"></el-button>
 
                     </template>
                 </el-table-column>
@@ -51,6 +53,7 @@
         <el-dialog title="修改个人赛事" :visible.sync="updateDialogVisible" width="50%" @close="updateDialogClosed">
             <!-- 内容主体区域 -->
             <el-form :model="updateForm" :rules="updateFormRules" ref="updateFormRef" label-width="90px">
+
                 <!-- 赛事编号 -->
                 <el-form-item label="赛事编号" prop="matchId">
                     <el-input v-model="updateForm.matchId" :disabled="disabled"></el-input>
@@ -63,14 +66,22 @@
                 <el-form-item label="学号" prop="studentId">
                     <el-input v-model="updateForm.studentId" :disabled="disabled"></el-input>
                 </el-form-item>
+                <!-- 姓名 -->
+                <el-form-item label="姓名" prop="studentName">
+                    <el-input v-model="updateForm.studentName"></el-input>
+                </el-form-item>
                 <!-- 成绩 -->
                 <el-form-item label="成绩" prop="studentScore">
                     <el-input v-model="updateForm.studentScore"></el-input>
                 </el-form-item>
+                <!-- 排名 -->
+                <el-form-item label="排名" prop="studentPlace">
+                    <el-input v-model="updateForm.studentPlace"></el-input>
+                </el-form-item>
                 <!-- 报名状态 -->
                 <el-form-item label="报名状态" prop="status">
                     <template>
-                        <el-radio v-model="updateForm.status" label="1">已通过</el-radio>
+                        <el-radio v-model="updateForm.status" label="1">通过</el-radio>
                         <el-radio v-model="updateForm.status" label="2">未通过</el-radio>
                     </template>
                 </el-form-item>
@@ -122,14 +133,13 @@ export default {
                 matchId: '',
                 matchTitle: '',
                 studentId: '',
+                studentName: '',
                 studentScore: '',
+                studentPlace: '',
                 status: '',
             },
             // 修改用户表单验证规则
             updateFormRules: {
-                studentScore: [
-                    { required: true, message: "请输入成绩", trigger: "blur" },
-                ],
                 status: [
                     { required: true, message: "请设置状态", trigger: "blur" },
                 ],
@@ -151,6 +161,7 @@ export default {
             }
         },
         async getIndMatchesList() {
+            console.log(this.queryInfo.status)
             // 调用get请求
             const { data: res } = await this.$http.get("allIndMatches", {
                 params: this.queryInfo,
@@ -160,7 +171,7 @@ export default {
         },
         async resetupdateForm() {
             if (this.title == "修改个人赛事") {
-                const { data: res } = await this.$http.get("getUpdateIndMatches?id=" + this.updateForm.matchId);
+                const { data: res } = await this.$http.get("getUpdateIndMatches?id=" + this.updateForm.id);
                 this.updateForm = res.data;
                 return
             }
@@ -181,11 +192,7 @@ export default {
         // 展示修改框
         async showUpdateDialog(id) {
             this.disabled = true
-            console.log()
             const { data: res } = await this.$http.get("getUpdateIndMatches?id=" + id);
-            console.log(res);
-
-
             this.updateForm = res.data;
             this.updateDialogVisible = true;
         },

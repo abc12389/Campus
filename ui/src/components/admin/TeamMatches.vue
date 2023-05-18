@@ -33,10 +33,10 @@
                     <template slot-scope="scope">
                         <!-- 修改 -->
                         <el-button type="primary" icon="el-icon-edit" style="background-color: grey; border-color: grey;"
-                            circle size="mini" @click="showUpdateDialog(scope.row.matchId)"></el-button>
+                            circle size="mini" @click="showUpdateDialog(scope.row.id)"></el-button>
                         <!-- 删除 -->
                         <el-button type="danger" icon="el-icon-delete" circle size="mini"
-                            @click="deleteTeamMatches(scope.row.matchId)"></el-button>
+                            @click="deleteTeamMatches(scope.row.id)"></el-button>
 
                     </template>
                 </el-table-column>
@@ -71,6 +71,10 @@
                 <!-- 成绩 -->
                 <el-form-item label="成绩" prop="teamScore">
                     <el-input v-model="updateForm.teamScore"></el-input>
+                </el-form-item>
+                <!-- 排名 -->
+                <el-form-item label="排名" prop="teamPlace">
+                    <el-input v-model="updateForm.teamPlace"></el-input>
                 </el-form-item>
                 <!-- 报名状态 -->
                 <el-form-item label="报名状态" prop="status">
@@ -166,7 +170,7 @@ export default {
         },
         async resetupdateForm() {
             if (this.title == "修改团队赛事") {
-                const { data: res } = await this.$http.get("getUpdateTeamMatches?id=" + this.updateForm.matchId);
+                const { data: res } = await this.$http.get("getUpdateTeamMatches?id=" + this.updateForm.id);
                 this.updateForm = res.data;
                 return
             }
@@ -202,7 +206,7 @@ export default {
                 if (!valid) return;
                 // 发起请求
                 const { data: res } = await this.$http.put("updateTeamMatches", this.updateForm);
-                if (res.code != "success") return this.$message.error("操作失败！！！");
+                if (res.code != 200) return this.$message.error("操作失败！！！");
                 this.$message.success("操作成功！！！");
                 //隐藏
                 this.updateDialogVisible = false;
@@ -226,7 +230,7 @@ export default {
                 return this.$message.info("已取消删除");
             }
             const { data: res } = await this.$http.delete("deleteTeamMatches?id=" + id);
-            if (res.code != "success") {
+            if (res.code != 200) {
                 return this.$message.error("操作失败！！！");
             }
             this.$message.success("操作成功！！！");

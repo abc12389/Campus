@@ -12,7 +12,6 @@ Vue.prototype.$http = axios
 // 设置请求的根路径
 axios.defaults.baseURL = "http://localhost:9000/"
 axios.interceptors.request.use(config => {
-  console.log(config);
   // 请求头挂载信息
   config.headers.Authorization = window.sessionStorage.getItem("flag");
   // 在最后必须return config

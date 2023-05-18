@@ -53,30 +53,30 @@
             <el-form :model="updateForm" ref="updateFormRef" label-width="70px">
                 <!-- 学生学号 -->
                 <el-form-item label="学生学号" prop="userId">
-                    <el-input v-model="updateForm.userId"></el-input>
+                    <el-input v-model="updateForm.userId" :disabled="disabled"></el-input>
                 </el-form-item>
                 <!-- 密码 -->
                 <el-form-item label="密码" prop="userPwd">
-                    <el-input v-model="updateForm.userPwd"></el-input>
+                    <el-input v-model="updateForm.userPwd" :disabled="disabled"></el-input>
                 </el-form-item>
                 <!-- 学生姓名 -->
                 <el-form-item label="学生姓名" prop="studentName">
-                    <el-input v-model="updateForm.studentName"></el-input>
+                    <el-input v-model="updateForm.studentName" :disabled="disabled"></el-input>
                 </el-form-item>
                 <!-- 性别 -->
                 <el-form-item label="性别" prop="studentSex">
-                    <template>
-                        <el-radio v-model="updateForm.studentSex" label="男">男</el-radio>
-                        <el-radio v-model="updateForm.studentSex" label="女">女</el-radio>
+                    <template :disabled="disabled">
+                        <el-radio v-model="updateForm.studentSex" label="男" :disabled="disabled">男</el-radio>
+                        <el-radio v-model="updateForm.studentSex" label="女" :disabled="disabled">女</el-radio>
                     </template>
                 </el-form-item>
                 <!-- 联系方式 -->
                 <el-form-item label="联系方式" prop="studentPhoneNumber">
-                    <el-input v-model="updateForm.studentPhoneNumber"></el-input>
+                    <el-input v-model="updateForm.studentPhoneNumber" :disabled="disabled"></el-input>
                 </el-form-item>
                 <!-- 学院 -->
                 <el-form-item label="学院" prop="studentDepartment">
-                    <el-select v-model="updateForm.studentDepartment" placeholder="请选择学院">
+                    <el-select v-model="updateForm.studentDepartment" placeholder="请选择学院" :disabled="disabled">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
@@ -84,19 +84,15 @@
                 <!-- 年级 -->
                 <el-form-item label="年级" prop="studentGrade">
                     <template>
-                        <el-radio v-model="updateForm.studentGrade" label="大一">大一</el-radio>
-                        <el-radio v-model="updateForm.studentGrade" label="大二">大二</el-radio>
-                        <el-radio v-model="updateForm.studentGrade" label="大三">大三</el-radio>
-                        <el-radio v-model="updateForm.studentGrade" label="大四">大四</el-radio>
+                        <el-radio v-model="updateForm.studentGrade" label="大一" :disabled="disabled">大一</el-radio>
+                        <el-radio v-model="updateForm.studentGrade" label="大二" :disabled="disabled">大二</el-radio>
+                        <el-radio v-model="updateForm.studentGrade" label="大三" :disabled="disabled">大三</el-radio>
+                        <el-radio v-model="updateForm.studentGrade" label="大四" :disabled="disabled">大四</el-radio>
                     </template>
                 </el-form-item>
                 <!-- 班级 -->
                 <el-form-item label="班级" prop="studentClass">
-                    <el-input placeholder="请输入阿拉伯数字" v-model="updateForm.studentClass"></el-input>
-                </el-form-item>
-                <!-- 团队编号 -->
-                <el-form-item label="团队编号" prop="teamId">
-                    <el-input v-model="updateForm.teamId"></el-input>
+                    <el-input placeholder="请输入阿拉伯数字" v-model="updateForm.studentClass" :disabled="disabled"></el-input>
                 </el-form-item>
                 <!-- 管理员 -->
                 <el-form-item label="管理员" prop="isAdmin">
@@ -117,6 +113,7 @@
 export default {
     data() {
         return {
+            disabled: true,
             // 请求数据
             queryInfo: {
                 studentName: "", //姓名
@@ -200,13 +197,23 @@ export default {
                 return '是'
             }
         },
+
+
         async getStuManagerList() {
-            // 调用post请求
+            // 调用get请求
             const { data: res } = await this.$http.get("allStuManager", {
                 params: this.queryInfo,
             });
             this.stuManagerlist = res.data; // 将返回数据赋值
             this.total = res.numbers; // 总个数
+        },
+        async resetupdateForm() {
+            if (this.title == "修改学生管理员信息") {
+                const { data: res } = await this.$http.get("getUpdateStuManager?id=" + this.updateForm.id);
+                this.updateForm = res.data;
+                return
+            }
+            this.$refs.updateFormRef.resetFields();
         },
         // 监听pageSize改变的事件(更改变每页显示条数时)
         handleSizeChange(newSize) {
@@ -221,7 +228,7 @@ export default {
         // 展示修改框
         async showUpdateDialog(id) {
             const { data: res } = await this.$http.get("getUpdateStuManager?id=" + id);
-            this.updateForm = res;
+            this.updateForm = res.data;
             this.updateDialogVisible = true;
         },
         // 关闭窗口
@@ -234,7 +241,7 @@ export default {
                 if (!valid) return;
                 // 发起请求
                 const { data: res } = await this.$http.put("updateStuManager", this.updateForm);
-                if (res != "success") return this.$message.error("操作失败！！！");
+                if (res.code != 200) return this.$message.error("操作失败！！！");
                 this.$message.success("操作成功！！！");
                 //隐藏
                 this.updateDialogVisible = false;
@@ -258,7 +265,7 @@ export default {
                 return this.$message.info("已取消删除");
             }
             const { data: res } = await this.$http.delete("deleteStuManager?id=" + id);
-            if (res != 200) {
+            if (res.code != 200) {
                 return this.$message.error("操作失败！！！");
             }
             this.$message.success("操作成功！！！");

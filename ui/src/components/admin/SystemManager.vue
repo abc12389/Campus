@@ -48,15 +48,15 @@
             <el-form :model="editForm" ref="editFormRef" label-width="70px">
                 <!-- 学生学号 -->
                 <el-form-item label="学生学号" prop="studentId">
-                    <el-input v-model="editForm.studentId"></el-input>
+                    <el-input v-model="editForm.studentId" :disabled="disabled"></el-input>
                 </el-form-item>
                 <!-- 赛事编号 -->
                 <el-form-item label="赛事编号" prop="matchId">
-                    <el-input v-model="editForm.matchId"></el-input>
+                    <el-input v-model="editForm.matchId" :disabled="disabled"></el-input>
                 </el-form-item>
                 <!-- 反馈内容 -->
                 <el-form-item label="反馈内容" prop="content">
-                    <el-input v-model="editForm.content"></el-input>
+                    <el-input v-model="editForm.content" :disabled="disabled"></el-input>
                 </el-form-item>
                 <!-- 回复 -->
                 <el-form-item label="回复" prop="reply">
@@ -74,6 +74,7 @@
 export default {
     data() {
         return {
+            disabled: true,
             // 请求数据
             queryInfo: {
                 pageNum: 1,
@@ -101,6 +102,14 @@ export default {
             this.SysManagerList = res.data; // 将返回数据赋值
             this.total = res.numbers; // 总个数
         },
+        async reseteditForm() {
+            if (this.title == "反馈回复") {
+                const { data: res } = await this.$http.get("getUpdateSysManager?id=" + this.editForm.id);
+                this.editForm = res.data;
+                return
+            }
+            this.$refs.editFormRef.resetFields();
+        },
         // 监听pageSize改变的事件(更改变每页显示条数时)
         handleSizeChange(newSize) {
             this.queryInfo.pageSize = newSize;
@@ -113,13 +122,8 @@ export default {
         },
         // 展示修改框
         async showEditDialog(id) {
-            const { data: res } = await this.$http.get("getUpdateDis?id=" + id);
-            if (res != "success") {
-                SysManagerinfo.state = !SysManagerinfo.state;
-                return this.$message.error("操作失败！！！");
-            }
-            this.$message.success("操作成功！！！");
-            this.editForm = res;
+            const { data: res } = await this.$http.get("getUpdateSysManager?id=" + id);
+            this.editForm = res.data;
             this.editDialogVisible = true;
         },
         // 关闭窗口

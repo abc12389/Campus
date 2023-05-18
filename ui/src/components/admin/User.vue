@@ -1,6 +1,8 @@
 <template>
   <div>
+
     <el-card>
+      <Image src="../assets/background.png"></Image>
       <el-row :gutter="10">
         <el-col :span="5">
           <el-select v-model="queryInfo.department" clearable placeholder="请选择学院">
@@ -117,20 +119,21 @@
   </div>
 </template>
 <script>
+import { Image } from 'element-ui';
+
 export default {
   data() {
     return {
-
       title: "增加",
-      disabled: false,//修改的时候不能修改学号
+      disabled: false,
       // 请求数据
       queryInfo: {
-        studentName: "", //姓名
+        studentName: "",
         pageNum: 1,
         pageSize: 6,
         department: "", //学院
       },
-      userlist: [], // 用户列表
+      userlist: [],
       options: [
         {
           //学院
@@ -178,8 +181,8 @@ export default {
           label: "航空宇航学院",
         },
       ],
-      total: 0, // 最大数据记录
-      addUpdateDialogVisible: false, // 增加-对话框显示
+      total: 0,
+      addUpdateDialogVisible: false,
       // 添加用户表单项
       addForm: {
         userId: "",
@@ -228,14 +231,14 @@ export default {
     this.getUserList();
   },
   watch: {
-    'queryInfo.studentName': {
+    "queryInfo.studentName": {
       handler(newVal, oldVal) {
-        this.queryInfo.pageNum = 1
+        this.queryInfo.pageNum = 1;
       }
     },
-    'queryInfo.studentDepartment': {
+    "queryInfo.studentDepartment": {
       handler(newVal, oldVal) {
-        this.queryInfo.pageNum = 1
+        this.queryInfo.pageNum = 1;
       }
     },
   },
@@ -243,10 +246,9 @@ export default {
     cancelDialog() {
       this.addUpdateDialogVisible = false;
       this.$refs.addFormRef.resetFields();
-
     },
     async getUserList() {
-      // 调用post请求
+      // 调用get请求
       const { data: res } = await this.$http.get("allUser", {
         params: this.queryInfo,
       });
@@ -257,7 +259,7 @@ export default {
       if (this.title == "修改用户信息") {
         const { data: res } = await this.$http.get("getUpdateUser?id=" + this.addForm.userId);
         this.addForm = res.data;
-        return
+        return;
       }
       this.$refs.addFormRef.resetFields();
     },
@@ -277,16 +279,18 @@ export default {
     },
     // 添加用户
     addUser() {
-      if (this.title == '添加用户') {
+      if (this.title == "添加用户") {
         // addUser
         this.addOrUpdate("addUser");
-      } else if (this.title == '修改用户信息') {
+      }
+      else if (this.title == "修改用户信息") {
         this.addOrUpdate("updateUser");
       }
     },
     async addOrUpdate(url) {
       this.$refs.addFormRef.validate(async (valid) => {
-        if (!valid) return;
+        if (!valid)
+          return;
         // 发起请求
         const { data: res } = await this.$http.post(url, this.addForm);
         if (res.code != 200) {
@@ -300,15 +304,15 @@ export default {
     },
     // 展示添加框
     showAddDialog() {
-      this.disabled = false
-      this.addUpdateDialogVisible = true
-      this.title = "添加用户"
+      this.disabled = false;
+      this.addUpdateDialogVisible = true;
+      this.title = "添加用户";
     },
     // 展示修改框
     async showUpdateDialog(id) {
-      this.disabled = true
-      this.addUpdateDialogVisible = true
-      this.title = "修改用户信息"
+      this.disabled = true;
+      this.addUpdateDialogVisible = true;
+      this.title = "修改用户信息";
       const { data: res } = await this.$http.get("getUpdateUser?id=" + id);
       this.addForm = res.data;
     },
@@ -319,10 +323,12 @@ export default {
     // 确认修改
     updateUserInfo() {
       this.$refs.updateFormRef.validate(async (valid) => {
-        if (!valid) return;
+        if (!valid)
+          return;
         // 发起请求
         const { data: res } = await this.$http.put("updateUser", this.updateForm);
-        if (res != "success") return this.$message.error("操作失败！！！");
+        if (res != "success")
+          return this.$message.error("操作失败！！！");
         this.$message.success("操作成功！！！");
         //隐藏
         this.updateDialogVisible = false;
@@ -332,15 +338,11 @@ export default {
     // 删除按钮
     async deleteUser(id) {
       // 弹框
-      const confirmResult = await this.$confirm(
-        "此操作将永久删除该用户, 是否继续?",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning",
-        }
-      ).catch((err) => err);
+      const confirmResult = await this.$confirm("此操作将永久删除该用户, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).catch((err) => err);
       // 成功删除为confirm 取消为 cancel
       if (confirmResult != "confirm") {
         return this.$message.info("已取消删除");
@@ -353,6 +355,7 @@ export default {
       this.getUserList();
     },
   },
+  components: { Image }
 };
 </script>
 <style lang="less" scoped></style>

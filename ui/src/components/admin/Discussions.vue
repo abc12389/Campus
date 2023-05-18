@@ -22,11 +22,7 @@
                     <el-button icon="el-icon-search" style="background-color:#009688 ; color: #FFF;"
                         @click="getDiscussionsList">搜索</el-button>
                 </el-col>
-                <!-- <el-col :span="4">
-                    <el-button type="primary" @click="addDialogVisible = true">添加用户</el-button>
-                </el-col> -->
             </el-row>
-            <!-- 用户列表 -->
             <!-- border边框   stripe隔行变色 -->
             <el-table :data="discussionsList" :header-cell-style="{ 'text-align': 'center' }"
                 :cell-style="{ 'text-align': 'center' }" border stripe>
@@ -38,16 +34,16 @@
                 </el-table-column>
                 <el-table-column label="发表者" width="90" prop="studentName"></el-table-column>
                 <el-table-column label="发表内容" width="250" prop="disContent"></el-table-column>
-                <el-table-column label="评论者" width="90" prop="responder"></el-table-column>
-                <el-table-column label="评论内容" width="250" prop="reply"></el-table-column>
+                <el-table-column label="评论者" width="90" prop="studentName"></el-table-column>
+                <el-table-column label="评论内容" width="250" prop="studentName"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <!-- 修改 -->
                         <el-button type="primary" icon="el-icon-edit" style="background-color: grey; border-color: grey;"
-                            circle size="mini" @click="showEditDialog(scope.row.id)"></el-button>
+                            circle size="mini" @click="showEditDialog(scope.row.discussionId)"></el-button>
                         <!-- 删除 -->
                         <el-button type="danger" icon="el-icon-delete" circle size="mini"
-                            @click="deleteDiscussions(scope.row.id)"></el-button>
+                            @click="deleteDiscussions(scope.row.discussionId)"></el-button>
 
                     </template>
                 </el-table-column>
@@ -57,19 +53,27 @@
                 :current-page="queryInfo.pageNum" :page-sizes="[1, 6, 10, 50]" :page-size="queryInfo.pageSize"
                 layout="total, sizes, prev, pager, next, jumper" :total="total"></el-pagination>
         </el-card>
-        <el-dialog title="修改用户信息" :visible.sync="editDialogVisible" width="50%" @colse="editDialogClosed">
+        <el-dialog title="修改信息" :visible.sync="editDialogVisible" width="50%" @colse="editDialogClosed">
             <el-form :model="editForm" ref="editFormRef" label-width="70px">
-                <!-- 用户名 -->
-                <el-form-item label="用户名" prop="discussionsname">
-                    <el-input v-model="editForm.discussionsname" disabled></el-input>
+                <!-- 发表时间 -->
+                <el-form-item label="发表时间" prop="publishTime">
+                    <el-input v-model="editForm.publishTime" :disabled="disabled"></el-input>
                 </el-form-item>
-                <!-- 密码 -->
-                <el-form-item label="密码" prop="password">
-                    <el-input v-model="editForm.password"></el-input>
+                <!-- 发表者 -->
+                <el-form-item label="发表者" prop="studentName">
+                    <el-input v-model="editForm.studentName" :disabled="disabled"></el-input>
                 </el-form-item>
-                <!-- 邮箱 -->
-                <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="editForm.email"></el-input>
+                <!-- 发表内容 -->
+                <el-form-item label="发表内容" prop="disContent">
+                    <el-input v-model="editForm.disContent" :disabled="disabled"></el-input>
+                </el-form-item>
+                <!-- 评论者 -->
+                <el-form-item label="评论者" prop="">
+                    <el-input v-model="editForm.studentName"></el-input>
+                </el-form-item>
+                <!-- 评论内容 -->
+                <el-form-item label="评论内容" prop="studentName">
+                    <el-input v-model="editForm.studentName"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -83,6 +87,7 @@
 export default {
     data() {
         return {
+            disabled: true,
             // 请求数据
             queryInfo: {
                 pageNum: 1,
@@ -120,6 +125,14 @@ export default {
             this.discussionsList = res.data; // 将返回数据赋值
             this.total = res.numbers; // 总个数
         },
+        async reseteditForm() {
+            if (this.title == "修改信息") {
+                const { data: res } = await this.$http.get("getUpdateDis?id=" + this.editForm.id);
+                this.editForm = res.data;
+                return
+            }
+            this.$refs.editFormRef.resetFields();
+        },
         // 监听pageSize改变的事件(更改变每页显示条数时)
         handleSizeChange(newSize) {
             this.queryInfo.pageSize = newSize;
@@ -133,12 +146,7 @@ export default {
         // 展示修改框
         async showEditDialog(id) {
             const { data: res } = await this.$http.get("getUpdateDis?id=" + id);
-            if (res != "success") {
-                discussionsinfo.state = !discussionsinfo.state;
-                return this.$message.error("操作失败！！！");
-            }
-            this.$message.success("操作成功！！！");
-            this.editForm = res;
+            this.editForm = res.data;
             this.editDialogVisible = true;
         },
         // 关闭窗口
@@ -151,7 +159,7 @@ export default {
                 if (!valid) return;
                 // 发起请求
                 const { data: res } = await this.$http.put("updateDiscussions", this.editForm);
-                if (res != "success") return this.$message.error("操作失败！！！");
+                if (res.code != 200) return this.$message.error("操作失败！！！");
                 this.$message.success("操作成功！！！");
                 //隐藏
                 this.editDialogVisible = false;
@@ -175,7 +183,7 @@ export default {
                 return this.$message.info("已取消删除");
             }
             const { data: res } = await this.$http.delete("deleteDiscussions?id=" + id);
-            if (res != "success") {
+            if (res.code != 200) {
                 return this.$message.error("操作失败！！！");
             }
             this.$message.success("操作成功！！！");

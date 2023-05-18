@@ -16,7 +16,7 @@ import lombok.ToString;
 @TableName("discussions")
 public class Discussions {
     @TableId(value = "discussionId",type = IdType.AUTO)
-    private String discussionId;
+    private int discussionId;
     @TableField("studentId")
     private String studentId;
     @TableField("studentName")
@@ -25,8 +25,4 @@ public class Discussions {
     private java.sql.Date publishTime;
     @TableField("disContent")
     private String disContent;
-    @TableField("responder")
-    private String responder;
-    @TableField("reply")
-    private String reply;
 }

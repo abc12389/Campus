@@ -23,11 +23,17 @@ public class IndMatchesConteroller {
     @Autowired
     IndMatchesDao indMatchesDao;
 
-    @CrossOrigin
+//    @CrossOrigin
     @RequestMapping("/allIndMatches")
     public String getIndMatchesList(QueryInfo queryInfo){
         if(queryInfo.getStatus()==""||queryInfo.getStatus()==null){
             queryInfo.setStatus(null);
+        }else {
+            if(queryInfo.getStatus().equals("已通过"))
+            queryInfo.setStatus("1");
+            else if(queryInfo.getStatus().equals("未通过"))
+                queryInfo.setStatus("2");
+            else queryInfo.setStatus("0");//申请中
         }
         if (queryInfo.getMatchTitle() != "" || queryInfo.getMatchTitle() != null) {
             queryInfo.setMatchTitle("%" + queryInfo.getMatchTitle() + "%");
@@ -56,19 +62,17 @@ public class IndMatchesConteroller {
     }
 
     @RequestMapping("/updateIndMatches")
-    public ResponseResult<String> updateIndMatches(@RequestBody  IndMatchesDTO indMatchesDTO) {
+    public ResponseResult<Integer> updateIndMatches(@RequestBody  IndMatchesDTO indMatchesDTO) {
         IndMatches indMatches  = new IndMatches();
         BeanUtils.copyProperties(indMatchesDTO, indMatches);
         int i = indMatchesDao.updateById(indMatches);
-        return new ResponseResult<String>(200, "修改成功", null);
-        //return 500,"ex.mesg"
+        return new ResponseResult<Integer>(200, "修改成功", null);
     }
 
-
     @RequestMapping("/deleteIndMatches")
-    public ResponseResult<String> deleteIndMatches(int id) {
+    public ResponseResult<Integer> deleteIndMatches(int id) {
         int i = indMatchesDao.deleteById(id);
-        return new ResponseResult<String>(200, "删除成功", null);
+        return new ResponseResult<Integer>(200, "删除成功", null);
     }
 
 }

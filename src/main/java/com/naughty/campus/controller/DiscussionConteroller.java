@@ -65,7 +65,6 @@ public class DiscussionConteroller {
         return new ResponseResult<DiscussionsDTO>(200, discussionsDTO);
     }
 
-
     @RequestMapping("/updateDiscussions")
     public ResponseResult<String> updateDis(@RequestBody DiscussionsDTO discussionsDTO) {
         Discussions discussions = new Discussions();
@@ -73,7 +72,6 @@ public class DiscussionConteroller {
         int i = discussionDao.updateById(discussions);
         return new ResponseResult<String>(200, "修改成功", null);
     }
-
 
     @RequestMapping("/deleteDiscussions")
     public ResponseResult<String> deleteDiscussions(int id) {

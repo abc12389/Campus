@@ -1,10 +1,11 @@
 <template>
   <el-container class="home-container">
     <!--头部布局-->
-    <el-header style="background-color: #EBEEF5">
+    <el-header style="background-color: #4481ac">
       <div style="color:#fbf8ff">
         <span>校园赛事管理系统</span>
       </div>
+      <span style="margin-left: 60%; font-size: 16px;"> {{ name }} </span>
       <el-button style="background-color: rgb(161, 157, 176);" type="info" @click="logout">退出登录</el-button>
     </el-header>
     <el-container>
@@ -18,7 +19,7 @@
            router开启路由 active-text-color 颜色--
            :collapse="isCollapse" 是否变小 -->
         <!-- 取消伸缩动画 -->
-        <el-menu background-color="#EBEEF5" text-color="#fff" active-text-color="#faab43" unique-opened
+        <el-menu background-color="#4481ac" text-color="#fff" active-text-color="#faab43" unique-opened
           :collapse="isCollapse" :collapse-transition="false" :router="true" :default-active="activePath">
           <template v-for="item in menuList">
             <el-submenu v-if="item.slist.length > 0" :index="item.id + ''" :key="item.id">
@@ -71,11 +72,13 @@ export default {
       isCollapse: false,
       // 被激活的连接
       activePath: "",
+      name: "",
     };
   },
   // 类似onload
   created() {
     this.getMenuList();
+    this.getName();
     if (window.sessionStorage.getItem("activePath") == null) {
       this.activePath = "/welcome"; // 取出session里的访问路径
     } else {
@@ -93,6 +96,15 @@ export default {
       if (res.status != 200) return this.$message.error("操作失败！！！");
       this.menuList = res.data;
     },
+    async getName() {
+      var id = window.sessionStorage.getItem("id");
+      const { data: res } = await this.$http.get("user?id=" + id);
+      if (res.code == 200) {
+        this.name = "欢迎：" + res.data;
+      } else {
+        this.name = "用户名获取失败，请刷新重试！！！";
+      }
+    },
     // 切换菜单折叠与展开
     toggleCollapase() {
       this.isCollapse = !this.isCollapse;
@@ -107,7 +119,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .el-header {
-  background-color: #EBEEF5;
+  background-color: #4481ac;
   display: flex;
   justify-content: space-between; // 左右贴边
   padding-left: 0%; // 左边界
@@ -128,7 +140,7 @@ export default {
 }
 
 .el-aside {
-  background-color: #EBEEF5;
+  background-color: #4481ac;
   ;
 
   .el-menu {
@@ -138,6 +150,7 @@ export default {
 
 .el-main {
   background-color: #eaedf1;
+  // background: url(../assets/background.png);
 }
 
 .home-container {
@@ -154,7 +167,7 @@ export default {
 }
 
 .toggle-button {
-  background-color: #EBEEF5;
+  background-color: #657395;
   font-size: 20px;
   line-height: 30px;
   color: #fff;

@@ -6,7 +6,7 @@
 
     <select id="getAllIndMatches" resultType="com.naughty.campus.bean.IndMatches">
         SELECT
-        matchId,matchTitle,studentId,studentScore,status
+       id, matchId,matchTitle,studentId,studentName,studentScore,studentPlace,status
         FROM individualmatches
         where 1=1
         <if test="info.matchTitle !=null">

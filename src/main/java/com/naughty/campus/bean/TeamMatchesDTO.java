@@ -1,5 +1,7 @@
 package com.naughty.campus.bean;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,7 @@ import lombok.ToString;
 @ToString
 public class TeamMatchesDTO {
 
+    private int id;
     private int matchId;
     private String matchTitle;
     private String teamId;

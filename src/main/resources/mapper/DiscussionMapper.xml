@@ -6,9 +6,9 @@
 
     <select id="getAllDiscussions" resultType="com.naughty.campus.bean.Discussions">
         SELECT
-               discussionId,studentId,studentName,publishTime,disContent,responder,reply
+        discussionId,studentId,studentName,publishTime,disContent
         FROM
-             discussions
+        discussions
         WHERE 1=1
 
         <if test="info.studentName !=null">
@@ -22,7 +22,7 @@
 
     <select id="getDiscussionsCounts" resultType="java.lang.Integer">
         SELECT count(*) FROM `discussions`
-           <if test="info.studentName !=null">
+        <if test="info.studentName !=null">
             and studentName like #{info.studentName}
         </if>
         <if test="info.disContent !=null ">

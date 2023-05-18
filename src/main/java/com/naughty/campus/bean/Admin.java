@@ -1,9 +1,19 @@
 package com.naughty.campus.bean;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+@TableName("teacheradmin")
 public class Admin {
+    @TableId(value = "id",type = IdType.AUTO)
     private int id;
+    @TableField("name")
     private String name;
+    @TableField("pwd")
     private String pwd;
+    @TableField("role")
     private String role;
 
     public Admin() {

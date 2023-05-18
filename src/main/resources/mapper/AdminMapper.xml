@@ -9,6 +9,14 @@
     </select>
 
 
+    <select id="getAdmin" resultType="com.naughty.campus.bean.Admin">
+        SELECT * FROM teacheradmin
+        WHERE name=#{name} AND pwd=#{pwd}
+    </select>
+
+
+
+
 
     <select id="getUpdateAdmin" resultType="com.naughty.campus.bean.Admin">
         SELECT * FROM teacheradmin WHERE id = #{id}

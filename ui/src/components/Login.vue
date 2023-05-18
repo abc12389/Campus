@@ -14,7 +14,7 @@
               ">
               欢迎使用校园赛事系统
             </h2>
-            <h5 style="color: red">请先登录</h5>
+            <h5 style="color: rgb(161, 217, 240)">请先登录</h5>
             <div class="container_right">
               <el-form class="form" id="form2" ref="loginFormRef" :model="loginForm" :rules="loginRules" label-width="0px"
                 style="width: 80%; display: inline-block">
@@ -67,10 +67,14 @@ export default {
         if (!valid) return;
         // 调用get请求
         const { data: res } = await this.$http.post("login", this.loginForm);
-        if (res == "ok") {
+        if (res.code == 200) {
           window.sessionStorage.setItem("flag", "ok"); // session 放置
           this.$message.success("登陆成功！！！");
-          this.$router.push({ path: "/home" });
+          window.sessionStorage.setItem("id", res.data); // session 放置
+          this.$router.push({
+            path: "/home"
+          });
+
         } else {
           this.$message.error("登录失败！！！");
         }
