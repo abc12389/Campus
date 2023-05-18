@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.naughty.campus.dao.SysManagerDao">
+
+    <select id="getAllSysManager" resultType="com.naughty.campus.bean.SysManager">
+        SELECT
+               feedbackId,studentId,matchId,content,reply
+        FROM
+             feedbacks
+        WHERE 1=1
+
+        <if test="info.studentId !=null">
+            and studentId like #{info.studentId}
+        </if>
+        <if test="info.content !=null ">
+            and content like #{info.content}
+        </if>
+        LIMIT #{info.pageNum},#{info.pageSize}
+    </select>
+
+    <select id="getSysManagerCounts" resultType="java.lang.Integer">
+        SELECT count(*) FROM feedbacks
+           <if test="info.studentId !=null ">
+            and studentId like #{info.studentId}
+        </if>
+        <if test="info.content !=null ">
+            and content like #{info.content}
+        </if>
+
+    </select>
+</mapper>
